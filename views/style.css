@@ -1,0 +1,49 @@
+.selected {
+	background-color: brown;
+	color: #FFF;
+}
+
+.hiddenRow {
+	padding: 0 !important;
+}
+
+qacp {
+	color: #818c46;
+}
+
+nav {
+	background-color: #f9f8ef;
+}
+
+div.progress-bar.qacp {
+	color: #888c90;
+	background-color: #818c46;
+}
+
+a.qacp:hover {
+	color: #616c36;
+}
+
+a.qacp {
+	color: #818c46;
+}
+
+button.btn.btn-secondary.qacp {
+	color: #ffffff;
+	background-color: #818c46;
+}
+
+button.btn.btn-secondary.qacp:hover {
+	color: #ffffff;
+	background-color: #616c36;
+}
+
+.nav-link small {
+	display: block;
+	font-size: 10px;
+}
+
+nav.qacp,
+form.qacp {
+	background-color: #ffffff;
+}
