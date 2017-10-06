@@ -9,7 +9,7 @@ module.exports = function (files) {
 	let authoredBy = [''];
 	let videoURL = '';
 
-	function Step(num, text, type, fidx, seqidx) {
+	function Step(num, text, lines, fidx, seqidx, time, type) {
 		this.num = num;
 		this.text = text;
 		this.type = ((type == null) ? 'step' : 'run');
@@ -43,10 +43,11 @@ module.exports = function (files) {
 		let file = files[i];
 		log(i);
 		let data = fs.readFileSync(file, 'utf8');
-		let match, prevMatch, tag, num, type;
+		let lines, num, match, mod, prevMatch, tag, tags, text, time, type;
 		let loop = true;
 		let steps = [];
 		let regex = /\n^.*\/\/\d+[^\n]*/gm;
+		let tagRegex = /([\+|\-|\*|\/|\=]+[^ ]+|\(.*\)|\d+:\d+|\d+)/g;
 		for (var j = -1; loop; j++) {
 			if (((match = regex.exec(data)) == null)) {
 				match = {
@@ -55,15 +56,30 @@ module.exports = function (files) {
 				loop = false;
 			}
 			if (prevMatch != null) {
-				tag = prevMatch[0].split(' ').pop();
-				num = Number(tag.match(/\d+/));
-				type = tag.match(/\[a-zA-Z]*/);
-				steps.push(new Step(
-					num, data.slice(prevMatch.index, match.index),
-					type, i, j
-				));
-				seq.push(steps[j]);
-				set.push(steps[j]);
+				text = data.slice(prevMatch.index, match.index);
+				lines = (text.match(/\r\n|\r|\n/g) || [1]).length;
+				tags = tagRegex.exec(prevMatch[0].split('\/\/').pop());
+				for (let k = 0; k < tags.length; k++) {
+					tag = tags[k];
+					if (/[\+|\-|\*|\/|\=]+[^ ]+/.test(tag)) {
+						mod =
+					} else if (/\(.*\)/.test(tag)) {
+
+					} else if (/\d+:\d+/.test(tag)) {
+						time = tag;
+					} else if (/\d+[\S]*/.test(tag)) {
+						num = Number(tag.match());
+						if (k > 0) {
+
+						}
+						steps.push(new Step(
+							num, data.slice(prevMatch.index, match.index),
+							type, i, j
+						));
+						seq.push(steps[j]);
+						set.push(steps[j]);
+					}
+				}
 				prevMatch = match;
 			} else {
 				prevMatch = match;
