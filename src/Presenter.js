@@ -9,11 +9,11 @@ module.exports = function (files) {
 	let authoredBy = [''];
 	let videoURL = '';
 
-	function Step(num, text, lines, fidx, seqidx, time, type) {
+	function Step(num, text, lines, fidx, seqidx, opt) {
 		this.num = num;
 		this.text = text;
-		this.type = ((type == null) ? 'step' : 'run');
-		this.lines = (text.match(/\r\n|\r|\n/g) || [1]).length;
+		this.opt = opt;
+		this.lines = lines;
 		this.fidx = fidx;
 		this.seqidx = seqidx;
 		this.setidx = -1;
@@ -72,10 +72,17 @@ module.exports = function (files) {
 						if (k > 0) {
 
 						}
-						steps.push(new Step(
-							num, data.slice(prevMatch.index, match.index),
-							type, i, j
-						));
+						steps.push({
+							lines: lines,
+							num: num,
+							opt: {
+								r: 3,
+								t: 5
+							},
+							seqidx: i,
+							setidx: -1,
+							text: data.slice(prevMatch.index, match.index)
+						});
 						seq.push(steps[j]);
 						set.push(steps[j]);
 					}
