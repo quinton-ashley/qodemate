@@ -1,7 +1,7 @@
 {
   "author": "Quinton Ashley",
   "bin": {
-    "qodemate": "./index.js"
+    "qodemate": "./app.js"
   },
   "bugs": {
     "url": "https://github.com/quinton-ashley/qodemate/issues"
@@ -38,10 +38,10 @@
   "directories": {
     "src": "src"
   },
-  "entry point": "index.js",
+  "entry point": "app.js",
   "keywords": [],
   "license": "UNLICENSED",
-  "main": "index.js",
+  "main": "app.js",
   "maintainers": [
     {
       "name": "Quinton Ashley",
@@ -55,10 +55,10 @@
   },
   "scripts": {
     "prestart": "git pull && npm up",
-    "start": "node index.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "version": "git add -A",
     "postversion": "git push && git push --tags"
   },
-  "version": "0.0.3"
+  "version": "0.0.4"
 }

@@ -43,11 +43,10 @@ module.exports = function (files) {
 		let file = files[i];
 		log(i);
 		let data = fs.readFileSync(file, 'utf8');
-		let lines, num, match, mod, prevMatch, tag, tags, text, time, type;
+		let lines, match, mod, prevMatch, tag, tags, text;
 		let loop = true;
-		let steps = [];
-		let regex = /\n^.*\/\/\d+[^\n]*/gm;
-		let tagRegex = /([\+|\-|\*|\/|\=]+[^ ]+|\(.*\)|\d+:\d+|\d+)/g;
+		let regex = /\n^.*\/\/\d[^\n]*/gm;
+		let tagRegex = /([^ \w][^\);]+[\);]|[a-zA-Z][^ a-zA-Z]*|[\d\.]+)/g;
 		for (var j = -1; loop; j++) {
 			if (((match = regex.exec(data)) == null)) {
 				match = {
@@ -58,35 +57,31 @@ module.exports = function (files) {
 			if (prevMatch != null) {
 				text = data.slice(prevMatch.index, match.index);
 				lines = (text.match(/\r\n|\r|\n/g) || [1]).length;
-				tags = tagRegex.exec(prevMatch[0].split('\/\/').pop());
+				tags = prevMatch[0].split('//').pop().match(tagRegex);
+				let cur;
 				for (let k = 0; k < tags.length; k++) {
 					tag = tags[k];
-					if (/[\+|\-|\*|\/|\=]+[^ ]+/.test(tag)) {
-						mod =
-					} else if (/\(.*\)/.test(tag)) {
-
-					} else if (/\d+:\d+/.test(tag)) {
-						time = tag;
-					} else if (/\d+[\S]*/.test(tag)) {
-						num = Number(tag.match());
+					if (/[^ \w][^\);]+[\);]/.test(tag)) {
+						cur.opt.x = tag;
+					} else if (/[a-zA-Z][^ a-zA-Z]*/.test(tag)) {
+						cur.opt[tag[0]] = tag.slice(1);
+					} else if (/[\d\.]+/.test(tag)) {
 						if (k > 0) {
-
+							seq.push(cur);
+							set.push(cur);
 						}
-						steps.push({
+						cur = {
 							lines: lines,
-							num: num,
-							opt: {
-								r: 3,
-								t: 5
-							},
+							num: Number(tag),
+							opt: {},
 							seqidx: i,
 							setidx: -1,
-							text: data.slice(prevMatch.index, match.index)
-						});
-						seq.push(steps[j]);
-						set.push(steps[j]);
+							text: ((k == 0) ? text : '')
+						};
 					}
 				}
+				seq.push(cur);
+				set.push(cur);
 				prevMatch = match;
 			} else {
 				prevMatch = match;
@@ -102,7 +97,8 @@ module.exports = function (files) {
 		for (var q = 0; q < set.length; q++) {
 			set[q].setidx = q;
 		}
-		//				log(set);
+		log(seq);
+		log(set);
 	}
 
 	const countLines = (cur, init, dest) => {
