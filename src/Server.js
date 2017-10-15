@@ -55,6 +55,7 @@ module.exports = function (args, opt) {
 	});
 
 	app.get('/next', (req, res) => {
+		log('debug 0');
 		ent.next();
 		res.render('index', {
 			title: 'Next',

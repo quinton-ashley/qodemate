@@ -39,15 +39,14 @@ module.exports = function (files) {
 	let seq = [];
 	let set = [];
 	let slides = [];
-	for (var i in files) {
+	for (let i = 0; i < files.length; i++) {
 		let file = files[i];
-		log(i);
 		let data = fs.readFileSync(file, 'utf8');
 		let lines, match, mod, prevMatch, tag, tags, text;
 		let loop = true;
 		let regex = /\n^.*\/\/\d[^\n]*/gm;
 		let tagRegex = /([^ \w][^\);]+[\);]|[a-zA-Z][^ a-zA-Z]*|[\d\.]+)/g;
-		for (var j = -1; loop; j++) {
+		for (let j = -1; loop; j++) {
 			if (((match = regex.exec(data)) == null)) {
 				match = {
 					index: data.length - 1
@@ -62,7 +61,9 @@ module.exports = function (files) {
 				for (let k = 0; k < tags.length; k++) {
 					tag = tags[k];
 					if (/[^ \w][^\);]+[\);]/.test(tag)) {
-						cur.opt.x = tag;
+						cur.opt.d = j;
+						cur.lines = 0;
+						cur.text = tag;
 					} else if (/[a-zA-Z][^ a-zA-Z]*/.test(tag)) {
 						cur.opt[tag[0]] = tag.slice(1);
 					} else if (/[\d\.]+/.test(tag)) {
@@ -71,12 +72,13 @@ module.exports = function (files) {
 							set.push(cur);
 						}
 						cur = {
-							lines: lines,
+							file: i,
+							lines: ((k == 0) ? lines : -lines),
 							num: Number(tag),
 							opt: {},
-							seqidx: i,
+							seqidx: j,
 							setidx: -1,
-							text: ((k == 0) ? text : '')
+							text: ((k == 0) ? text : 'delete')
 						};
 					}
 				}
@@ -85,7 +87,6 @@ module.exports = function (files) {
 				prevMatch = match;
 			} else {
 				prevMatch = match;
-
 			}
 		}
 
@@ -94,11 +95,10 @@ module.exports = function (files) {
 			if (a.num > b.num) return 1;
 			return a.seqidx - b.seqidx;
 		});
-		for (var q = 0; q < set.length; q++) {
+		for (let q = 0; q < set.length; q++) {
 			set[q].setidx = q;
 		}
 		log(seq);
-		log(set);
 	}
 
 	const countLines = (cur, init, dest) => {
@@ -112,6 +112,7 @@ module.exports = function (files) {
 	}
 
 	const performPart = () => {
+		log('debug 2');
 		let cur, past;
 		let from = [];
 		if (setidx >= 0) {
@@ -166,6 +167,7 @@ module.exports = function (files) {
 	}
 
 	const perform = () => {
+		log('debug 1');
 		bot.focusOnFile(0);
 		performStep().next();
 	}

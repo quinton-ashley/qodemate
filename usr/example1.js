@@ -1,27 +1,27 @@
 // Quinton Ashley
 // https://www.youtube.com/watch?v=E7o1UpHH0c0
-function setup() { //0 t0:03
+function setup() { //0 0:03
 	createCanvas(windowWidth, windowHeight);
 	example0();
 }
 
-function drawCaterpillar() { //1 t0:08
+function drawCaterpillar() { //1 0:08
 	// initialize variables
 	var radius = 50;
 	// draw line
-	ellipse(50, 50, radius, radius); //2 t0:14
+	ellipse(50, 50, radius, radius); //2 0:14 4
 	ellipse(i, i, radius, radius); //4
 	i += 10;
 	// repeat //2
-	ellipse(60, 60, radius, radius); //2 t0:23
+	ellipse(60, 60, radius, radius); //2 0:23
 	ellipse(70, 70, radius, radius);
 	ellipse(80, 80, radius, radius);
 	ellipse(90, 90, radius, radius);
 	ellipse(100, 100, radius, radius);
 	ellipse(110, 110, radius, radius);
-	ellipse(120, 120, radius, radius); //4
+	ellipse(120, 120, radius, radius); //4 10
 	ellipse(130, 130, radius, radius); //4
-	ellipse(140, 140, radius, radius); //4
+	ellipse(140, 140, radius, radius); //4 10
 	ellipse(140, 140, radius, radius);
 	ellipse(150, 150, radius, radius);
 	ellipse(160, 160, radius, radius); //10
@@ -42,7 +42,7 @@ function drawCaterpillar() { //1 t0:08
 } //1
 
 function example1() {
-	// initialize variables //3 t0:18
+	// initialize variables //3 0:18
 	var radius = 50;
 	var i = 50;
 	// draw line
@@ -61,7 +61,7 @@ function example1() {
 } //1
 
 function example2() {
-	// initialize variables //5 t1:40
+	// initialize variables //5 1:40
 	var radius = 50;
 	// draw line
 	for (var i = 50; i < 200; i += 10) {

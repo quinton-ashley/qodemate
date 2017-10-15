@@ -17,7 +17,7 @@ var Bot = function () {
 	};
 
 	this.ensureKeysNotPressed = (cb) => {
-		while (robot.Keyboard.getState(robot.KeySpace)) {}
+		//		while (robot.Keyboard.getState(robot.KeySpace)) {}
 		cb();
 	}
 
