@@ -6,16 +6,14 @@ link(rel='stylesheet' type='text/css' href='bootstrap/dist/css/bootstrap.min.css
 link(rel='stylesheet' type='text/css' href='style.css')
 title= title
 
-body
-nav.navbar.sticky-top.d-flex.justify-content-center
+body.qm
+nav.navbar.fixed-bottom.d-flex.justify-content-center
 	ul.nav.d-flex.justify-content-center
 		li.nav-item: a.nav-link.active.m-0.p-0(href='#')
-			img(src='./img/qacp_logo.png' height='40')
-		li.nav-item: a.nav-link.qacp.m-0.py-0(href='#' data-toggle='collapse' data-target='#newExam') New Exam
-			small.col-12.m-0.p-0.d-flex.justify-content-center 22 Available
-		li.nav-item: a.nav-link.qacp(href='/next') next
-		li.nav-item: a.nav-link.qacp(href='/reset') reset
-		li.nav-item: a.nav-link.qacp(href='/exit') exit
+			img(src='img/qm_logo_Q.png' height='40')
+		li.nav-item: a.nav-link.qm(href='/next') next
+		li.nav-item: a.nav-link.qm(href='/reset') reset
+		li.nav-item: a.nav-link.qm(href='/exit') exit
 div.container.row.col-12.m-0.p-0
 	div.col-12
 		div(id='player')

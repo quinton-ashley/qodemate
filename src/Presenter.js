@@ -9,22 +9,22 @@ module.exports = function (files) {
 	let authoredBy = [''];
 	let videoURL = '';
 
-	function Step(num, text, lines, fidx, seqidx, opt) {
+	function Step(num, text, lines, fidx, seqIdx, opt) {
 		this.num = num;
 		this.text = text;
 		this.opt = opt;
 		this.lines = lines;
 		this.fidx = fidx;
-		this.seqidx = seqidx;
-		this.setidx = -1;
+		this.seqIdx = seqIdx;
+		this.setIdx = -1;
 
 		//	this.toString = () => {
 		//		return 'num: ' + this.num +
 		//			' type: ' + this.type +
 		//			' lines: ' + this.lines +
 		//			' fidx: ' + this.fidx +
-		//			' seqidx: ' + this.seqidx +
-		//			' setidx: ' + this.setidx;
+		//			' seqIdx: ' + this.seqIdx +
+		//			' setIdx: ' + this.setIdx;
 		//	}
 
 	}
@@ -35,18 +35,18 @@ module.exports = function (files) {
 	}
 
 	let check = false;
-	let setidx = -1;
+	let setIdx = -1;
 	let seq = [];
 	let set = [];
 	let slides = [];
 	for (let i = 0; i < files.length; i++) {
 		let file = files[i];
 		let data = fs.readFileSync(file, 'utf8');
-		let lines, match, mod, prevMatch, tag, tags, text;
+		let lines, match, mod, prevMatch, tag, tags, text, primarySeqIdx;
 		let loop = true;
 		let regex = /\n^.*\/\/\d[^\n]*/gm;
 		let tagRegex = /([^ \w][^\);]+[\);]|[a-zA-Z][^ a-zA-Z]*|[\d\.]+)/g;
-		for (let j = -1; loop; j++) {
+		for (let j = -1; loop; j++, primarySeqIdx = j) {
 			if (((match = regex.exec(data)) == null)) {
 				match = {
 					index: data.length - 1
@@ -56,29 +56,34 @@ module.exports = function (files) {
 			if (prevMatch != null) {
 				text = data.slice(prevMatch.index, match.index);
 				lines = (text.match(/\r\n|\r|\n/g) || [1]).length;
+				log(prevMatch[0].split('//').pop());
 				tags = prevMatch[0].split('//').pop().match(tagRegex);
 				let cur;
 				for (let k = 0; k < tags.length; k++) {
 					tag = tags[k];
+					log(tag);
 					if (/[^ \w][^\);]+[\);]/.test(tag)) {
-						cur.opt.d = j;
+						log('debug0');
 						cur.lines = 0;
 						cur.text = tag;
 					} else if (/[a-zA-Z][^ a-zA-Z]*/.test(tag)) {
 						cur.opt[tag[0]] = tag.slice(1);
 					} else if (/[\d\.]+/.test(tag)) {
 						if (k > 0) {
+							cur.seqIdx = j++;
 							seq.push(cur);
 							set.push(cur);
 						}
 						cur = {
 							file: i,
-							lines: ((k == 0) ? lines : -lines),
+							lines: ((k == 0) ? lines : -lines) + ((loop) ? 0 : 1),
 							num: Number(tag),
-							opt: {},
-							seqidx: j,
-							setidx: -1,
-							text: ((k == 0) ? text : 'delete')
+							opt: ((k == 0) ? {} : {
+								d: primarySeqIdx
+							}),
+							seqIdx: j,
+							setIdx: -1,
+							text: ((k == 0) ? text : 'd') + ((loop) ? '' : '\n')
 						};
 					}
 				}
@@ -93,10 +98,10 @@ module.exports = function (files) {
 		set.sort((a, b) => {
 			if (a.num < b.num) return -1;
 			if (a.num > b.num) return 1;
-			return a.seqidx - b.seqidx;
+			return a.seqIdx - b.seqIdx;
 		});
 		for (let q = 0; q < set.length; q++) {
-			set[q].setidx = q;
+			set[q].setIdx = q;
 		}
 		log(seq);
 	}
@@ -104,7 +109,7 @@ module.exports = function (files) {
 	const countLines = (cur, init, dest) => {
 		let result = 0;
 		for (let i = init; i < dest; i++) {
-			if (seq[i].setidx < cur.setidx) {
+			if (seq[i].setIdx < cur.setIdx) {
 				result += seq[i].lines;
 			}
 		}
@@ -112,15 +117,18 @@ module.exports = function (files) {
 	}
 
 	const performPart = () => {
-		log('debug 2');
 		let cur, past;
-		let from = [];
-		if (setidx >= 0) {
-			past = set[setidx];
+		let from = {
+			start: -1,
+			past: -1,
+			end: -1
+		};
+		if (setIdx >= 0) {
+			past = set[setIdx];
 		} else {
-			past = set[setidx + 1];
+			past = set[setIdx + 1];
 		}
-		cur = set[setidx + 1];
+		cur = set[setIdx + 1];
 
 		if (check && (cur.num != past.num)) {
 			check = false;
@@ -130,36 +138,52 @@ module.exports = function (files) {
 		check = true;
 
 		if (cur.num != 0) {
-			from[0] = countLines(cur, 0, cur.seqidx);
-			if (past.seqidx < cur.seqidx) {
-				from[1] = countLines(cur, past.seqidx + 1, cur.seqidx);
+			from.start = countLines(cur, 0, cur.seqIdx);
+			if (past.seqIdx < cur.seqIdx) {
+				// count down
+				from.past = countLines(cur, past.seqIdx + 1, cur.seqIdx);
 			} else {
-				from[1] = countLines(cur, cur.seqidx + 1, past.seqidx + 1);
+				// count up
+				from.past = countLines(cur, cur.seqIdx + 1, past.seqIdx + 1);
 			}
-			from[2] = countLines(cur, cur.seqidx, seq.length);
+			from.end = countLines(cur, cur.seqIdx, seq.length);
 			log(from);
 
-			//			if (from[2] < from[0] && from[2] < from[1]) {
-			//				bot.moveToEnd();
-			//				bot.move(from[2], 'up');
-			//			} else if (from[1] < from[0]) {
-			//				bot.moveToBOL();
-			//				bot.move(from[1], ((past.seqidx < cur.seqidx) ? 'down' : 'up'));
-			//			} else {
-			//				bot.moveToStart();
-			//				bot.move(from[0], 'down');
-			//			}
-
-			bot.move(from[1], ((past.seqidx < cur.seqidx) ? 'down' : 'up'));
+			if (from.end < from.start && from.end < from.past) {
+				bot.moveToEnd();
+				bot.move(from.end, 'up');
+			} else if (from.past < from.start) {
+				bot.move(from.past, ((past.seqIdx < cur.seqIdx) ? 'down' : 'up'));
+			} else {
+				bot.moveToStart();
+				bot.move(from.start, 'down');
+			}
 			bot.moveToEOL();
 		}
 		log(cur);
-		setidx++;
-		var paste = () => {
-			bot.paste();
+		setIdx++;
+		if (cur.lines >= 0) {
+			let textToPaste;
+			if (cur.lines == 0) {
+				bot.delete(seq[cur.opt.d].lines);
+				let firstChar = cur.text[0];
+				let lastChar = cur.text[cur.text.length - 1];
+				let regexReplace = `${firstChar}[^${lastChar}]*${lastChar}`;
+				regexReplace = new RegExp(regexReplace);
+				textToPaste = seq[cur.opt.d].text;
+				textToPaste = textToPaste.replace(regexReplace, cur.text);
+			} else {
+				textToPaste = cur.text;
+			}
+			var paste = () => {
+				bot.paste();
+				performStep().next();
+			};
+			ncp.copy(textToPaste, paste);
+		} else {
+			bot.delete(-cur.lines);
 			performStep().next();
-		};
-		ncp.copy(cur.text, paste);
+		}
 	}
 
 	const performStep = function* () {
@@ -167,7 +191,6 @@ module.exports = function (files) {
 	}
 
 	const perform = () => {
-		log('debug 1');
 		bot.focusOnFile(0);
 		performStep().next();
 	}
@@ -182,7 +205,7 @@ module.exports = function (files) {
 	}
 
 	this.reset = () => {
-		setidx = -1;
+		setIdx = -1;
 		return 0;
 	}
 

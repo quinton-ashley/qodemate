@@ -24,7 +24,7 @@ module.exports = function (args, opt) {
 	}
 
 	var Presenter = require('./Presenter.js');
-	var ent = new Presenter([__dirname + '/../usr/example0.js']);
+	var ent = new Presenter([__dirname + '/../usr/test2.js']);
 	// the static function allows us to retreive the content in the specified directory
 	app.use('/img', express.static(__dirname + '/../img'));
 	app.use('/bootstrap', express.static(__parentDir + '/node_modules/bootstrap'));
@@ -42,7 +42,7 @@ module.exports = function (args, opt) {
 	app.set('view engine', 'pug');
 
 	app.get('/', (req, res) => {
-		let mark = __dirname + '/../usr/report.md';
+		let mark = __dirname + '/../usr/test0.md';
 		let file = fs.readFile(mark, 'utf8', (err, data) => {
 			if (err) {
 				log(err);
