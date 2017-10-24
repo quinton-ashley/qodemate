@@ -1,13 +1,11 @@
-module.exports = function (files) {
+module.exports = function (args, opt) {
 	const bot = require('./Bot.js');
 	const fs = require('fs');
 	const ncp = require('copy-paste');
 	const open = require('opn');
+	const path = require('path');
 
 	const log = console.log;
-
-	let authoredBy = [''];
-	let videoURL = '';
 
 	function Step(num, text, lines, fidx, seqIdx, opt) {
 		this.num = num;
@@ -39,12 +37,25 @@ module.exports = function (files) {
 	let seq = [];
 	let set = [];
 	let slides = [];
+	let files = [args[0]];
 	for (let i = 0; i < files.length; i++) {
 		let file = files[i];
 		let data = fs.readFileSync(file, 'utf8');
-		let lines, match, mod, prevMatch, tag, tags, text, primarySeqIdx;
+		let lines, match, mod, prevMatch, tag, tags, text, primarySeqIdx, regex;
 		let loop = true;
-		let regex = /\n^.*\/\/\d[^\n]*/gm;
+		file = path.parse(file);
+		switch (file.ext) {
+			case '.css':
+				regex = /\n^.*\/\*\d[^\n]*/gm;
+			case '.md':
+				regex = /\n^.*\# \d[^\n]*/gm;
+			case '.c':
+			case '.js':
+			case '.java':
+			case '.h':
+			case '.m':
+				regex = /\n^.*\/\/\d[^\n]*/gm;
+		}
 		let tagRegex = /([^ \w][^\);]+[\);]|[a-zA-Z][^ a-zA-Z]*|[\d\.]+)/g;
 		for (let j = -1; loop; j++, primarySeqIdx = j) {
 			if (((match = regex.exec(data)) == null)) {
@@ -56,14 +67,11 @@ module.exports = function (files) {
 			if (prevMatch != null) {
 				text = data.slice(prevMatch.index, match.index);
 				lines = (text.match(/\r\n|\r|\n/g) || [1]).length;
-				log(prevMatch[0].split('//').pop());
 				tags = prevMatch[0].split('//').pop().match(tagRegex);
 				let cur;
 				for (let k = 0; k < tags.length; k++) {
 					tag = tags[k];
-					log(tag);
 					if (/[^ \w][^\);]+[\);]/.test(tag)) {
-						log('debug0');
 						cur.lines = 0;
 						cur.text = tag;
 					} else if (/[a-zA-Z][^ a-zA-Z]*/.test(tag)) {

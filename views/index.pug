@@ -2,18 +2,24 @@ doctype html
 html
 
 head
+link(rel='stylesheet' type='text/css' href='md-icons/dist/material-design-icons.css')
 link(rel='stylesheet' type='text/css' href='bootstrap/dist/css/bootstrap.min.css')
 link(rel='stylesheet' type='text/css' href='style.css')
 title= title
 
 body.qm
-nav.navbar.fixed-bottom.d-flex.justify-content-center
-	ul.nav.d-flex.justify-content-center
-		li.nav-item: a.nav-link.active.m-0.p-0(href='#')
-			img(src='img/qm_logo_Q.png' height='40')
-		li.nav-item: a.nav-link.qm(href='/next') next
-		li.nav-item: a.nav-link.qm(href='/reset') reset
-		li.nav-item: a.nav-link.qm(href='/exit') exit
+nav.navbar.fixed-bottom
+	a.navbar-brand(href='#')
+		img(src='img/qm_logo_Q.png' height='24')
+	ul.nav.justify-content-center
+		li.nav-item: a.nav-link.qm(href='/helium'): i.material-icons.md-light picture_in_picture
+		li.nav-item: a.nav-link.qm(href='/previous'): i.material-icons.md-light navigate_before
+		li.nav-item: a.nav-link.qm(href='/play'): i.material-icons.md-light play_arrow
+		li.nav-item: a.nav-link.qm(href='/next'): i.material-icons.md-light navigate_next
+		li.nav-item: a.nav-link.qm(href='/reset'): i.material-icons.md-light autorenew
+	ul.nav.justify-content-right
+		li.nav-item: a.nav-link.qm(href='/exit'): i.material-icons.md-light close
+		
 div.container.row.col-12.m-0.p-0
 	div.col-12
 		div(id='player')

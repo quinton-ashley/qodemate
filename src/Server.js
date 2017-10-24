@@ -24,11 +24,12 @@ module.exports = function (args, opt) {
 	}
 
 	var Presenter = require('./Presenter.js');
-	var ent = new Presenter([__dirname + '/../usr/test2.js']);
+	var ent = new Presenter([__dirname + '/../usr/example0.js']);
 	// the static function allows us to retreive the content in the specified directory
 	app.use('/img', express.static(__dirname + '/../img'));
 	app.use('/bootstrap', express.static(__parentDir + '/node_modules/bootstrap'));
 	app.use('/jquery', express.static(__parentDir + '/node_modules/jquery'));
+	app.use('/md-icons', express.static(__parentDir + '/node_modules/material-design-icons-iconfont'));
 	app.use('/moment', express.static(__parentDir + '/node_modules/moment'));
 	app.use('/p5', express.static(__parentDir + '/node_modules/p5'));
 	app.use('/popper', express.static(__parentDir + '/node_modules/popper.js'));
