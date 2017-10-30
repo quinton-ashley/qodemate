@@ -4,9 +4,12 @@ module.exports = function (args, opt) {
 	const express = require('express');
 	const fs = require('fs-extra'); // open source library adds functionality to standard node.js fs
 	const md = require('markdown-it')();
+	const open = require('opn');
 	const path = require('path');
 	const process = require('process'); // built-in node.js process library
-	const open = require('opn');
+	const {
+		spawn
+	} = require('child_process');
 
 	const __homeDir = require('os').homedir();
 	const __parentDir = path.dirname(process.mainModule.filename);
@@ -40,6 +43,8 @@ module.exports = function (args, opt) {
 	// pug is template framework for rendering html dynamically
 	// it's like php but way better
 	app.set('view engine', 'pug');
+	// use local port
+	const port = ((args[0]) ? args[0] : 10002);
 
 	app.get('/', (req, res) => {
 		let mark = __dirname + '/../usr/test0.md';
@@ -49,8 +54,35 @@ module.exports = function (args, opt) {
 			}
 			res.render('index', {
 				title: 'Hey',
-				message: md.render(data.toString())
+				md: md.render(data.toString())
 			});
+		});
+	});
+
+	app.get('/helium', (req, res) => {
+		const helium = spawn('open', ['helium://http://127.0.0.1:' + port]);
+
+		helium.stderr.on('data', (data) => {
+			res.render('index', {
+				title: 'Helium',
+				md: md.render('Download the [Helium](http://heliumfloats.com/) app to use this feature!')
+			});
+		});
+
+		helium.on('close', (code) => {
+			log(`child process exited with code ${code}`);
+			res.render('index', {
+				title: 'Helium',
+				md: md.render('Opened in Helium!')
+			});
+		});
+	});
+
+	app.get('/chrome', (req, res) => {
+		let p = open('http://127.0.0.1:' + port);
+		res.render('index', {
+			title: 'Chrome',
+			md: md.render('Opened in Chrome!')
 		});
 	});
 
@@ -59,7 +91,7 @@ module.exports = function (args, opt) {
 		ent.next();
 		res.render('index', {
 			title: 'Next',
-			message: md.render('# next')
+			md: md.render('# next')
 		});
 	});
 
@@ -67,7 +99,7 @@ module.exports = function (args, opt) {
 		ent.prev();
 		res.render('index', {
 			title: 'Previous',
-			message: md.render('# prev')
+			md: md.render('# prev')
 		});
 	});
 
@@ -75,26 +107,24 @@ module.exports = function (args, opt) {
 		ent.reset();
 		res.render('index', {
 			title: 'Reset',
-			message: md.render('# reset')
+			md: md.render('# reset')
 		});
 	});
 
 	app.get('/exit', (req, res) => {
-		res.writeHead(200, {
-			'Content-Type': 'text/html'
+		res.render('index', {
+			title: 'Reset',
+			md: md.render('Exit Successful')
 		});
-		res.end('Exit successful');
 		gracefulWebExit();
 	});
 
 	server = require('http').createServer(app);
 
-	// use local port
-	const port = ((args[0]) ? args[0] : 10002);
 	server.listen(port, () => {
 		log('server listening on port ' + port);
 		if (opt.o) {
-			open('http://localhost:' + port + '/');
+			open('http://127.0.0.1:' + port);
 		}
 	});
 	enableDestroy(server);

@@ -1,4 +1,4 @@
-module.exports = function (files) {
+module.exports = function (args, opt) {
 	const bot = require('./bot.js');
 	const fs = require('fs');
 	const ncp = require('copy-paste');
