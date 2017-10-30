@@ -1,5 +1,4 @@
 module.exports = function (args, opt) {
-	const bodyParser = require('body-parser');
 	const chalk = require('chalk'); // open source terminal text coloring library
 	const enableDestroy = require('server-destroy');
 	const express = require('express');
@@ -23,7 +22,7 @@ module.exports = function (args, opt) {
 		});
 	}
 
-	var Presenter = require('./Presenter.js');
+	var Presenter = require('./presenter.js');
 	var ent = new Presenter([__dirname + '/../usr/test2.js']);
 	// the static function allows us to retreive the content in the specified directory
 	app.use('/img', express.static(__dirname + '/../img'));

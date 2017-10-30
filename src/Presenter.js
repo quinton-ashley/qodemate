@@ -1,5 +1,5 @@
 module.exports = function (files) {
-	const bot = require('./Bot.js');
+	const bot = require('./bot.js');
 	const fs = require('fs');
 	const ncp = require('copy-paste');
 	const open = require('opn');
