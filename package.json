@@ -21,6 +21,7 @@
     "fs-extra": "^4.0.2",
     "jquery": "^3.2.1",
     "markdown-it": "^8.4.0",
+    "material-design-icons-iconfont": "^3.0.3",
     "minimist": "^1.2.0",
     "moment": "^2.19.1",
     "opn": "^5.1.0",

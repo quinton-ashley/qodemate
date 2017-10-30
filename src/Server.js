@@ -28,6 +28,7 @@ module.exports = function (args, opt) {
 	app.use('/img', express.static(__dirname + '/../img'));
 	app.use('/bootstrap', express.static(__parentDir + '/node_modules/bootstrap'));
 	app.use('/jquery', express.static(__parentDir + '/node_modules/jquery'));
+	app.use('/md-icons', express.static(__parentDir + '/node_modules/material-design-icons-iconfont'));
 	app.use('/moment', express.static(__parentDir + '/node_modules/moment'));
 	app.use('/p5', express.static(__parentDir + '/node_modules/p5'));
 	app.use('/popper', express.static(__parentDir + '/node_modules/popper.js'));
