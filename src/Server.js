@@ -44,7 +44,7 @@ module.exports = function (args, opt) {
 	// it's like php but way better
 	app.set('view engine', 'pug');
 	// use local port
-	const port = ((args[0]) ? args[0] : 10002);
+	const port = ((args[0]) ? args[0] : 10005);
 
 	app.get('/', (req, res) => {
 		let mark = __dirname + '/../usr/test0.md';
