@@ -26,7 +26,7 @@ module.exports = function (args, opt) {
 	}
 
 	var Presenter = require('./presenter.js');
-	var ent = new Presenter([__dirname + '/../usr/test2.js']);
+	var ent = new Presenter([__dirname + '/../usr/test1.js']);
 	// the static function allows us to retreive the content in the specified directory
 	app.use('/img', express.static(__dirname + '/../img'));
 	app.use('/bootstrap', express.static(__parentDir + '/node_modules/bootstrap'));

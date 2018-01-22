@@ -28,7 +28,6 @@
 		"p5": "^0.5.16",
 		"popper.js": "^1.13.0",
 		"pug": "^2.0.0-rc.4",
-		"robot-js": "^1.0.2",
 		"robotjs": "^0.4.7",
 		"server-destroy": "^1.0.1",
 		"tether": "^1.4.2"
@@ -59,5 +58,5 @@
 		"version": "git add -A",
 		"postversion": "git push && git push --tags"
 	},
-	"version": "0.0.10"
+	"version": "0.0.11"
 }

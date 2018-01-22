@@ -1,7 +1,6 @@
 var Bot = function () {
-	const mouse = require('robotjs');
-	const robot = require('robot-js');
-	let keyboard = robot.Keyboard();
+	const robot = require('robotjs');
+	//	robot.setKeyboardDelay(10);
 
 	const log = console.log;
 
@@ -22,66 +21,57 @@ var Bot = function () {
 	}
 
 	this.focusOnApp = () => {
-		mouse.moveMouse(loc.app.x, loc.app.y);
-		mouse.mouseClick();
+		robot.moveMouse(loc.app.x, loc.app.y);
+		robot.mouseClick();
 	}
 
 	this.focusOnFile = (fidx) => {
-		mouse.moveMouse(loc.file[fidx].x, loc.file[fidx].y);
-		mouse.mouseClick();
+		robot.moveMouse(loc.file[fidx].x, loc.file[fidx].y);
+		robot.mouseClick();
 	}
 
 	this.moveToStart = () => {
 		log('moved to Start');
-		keyboard.press(robot.KEY_SYSTEM);
-		keyboard.click(robot.KEY_UP);
-		keyboard.release(robot.KEY_SYSTEM);
-	}
-
-	this.moveToBOL = () => {
-		log('moved to BOL');
-		keyboard.press(robot.KEY_SYSTEM);
-		keyboard.click(robot.KEY_LEFT);
-		keyboard.release(robot.KEY_SYSTEM);
-	}
-
-	this.moveToEOL = () => {
-		log('moved to EOL');
-		keyboard.press(robot.KEY_SYSTEM);
-		keyboard.click(robot.KEY_RIGHT);
-		keyboard.release(robot.KEY_SYSTEM);
+		robot.keyTap('up', 'command');
 	}
 
 	this.moveToEnd = () => {
 		log('moved to End');
-		keyboard.press(robot.KEY_SYSTEM);
-		keyboard.click(robot.KEY_DOWN);
-		keyboard.release(robot.KEY_SYSTEM);
+		robot.keyTap('down', 'command');
 	}
 
-	this.move = (lines, direction) => {
+	this.moveToBOL = () => {
+		log('moved to BOL');
+		robot.keyTap('left', 'command');
+	}
+
+	this.moveToEOL = () => {
+		log('moved to EOL');
+		robot.keyTap('right', 'command');
+	}
+
+	this.move = (lines, direction, mod) => {
 		log('moved ' + lines + ' ' + direction);
-		direction = ((direction.match('up')) ? robot.KEY_UP : robot.KEY_DOWN);
 		for (var i = 0; i < lines; i++) {
-			keyboard.click(direction);
+			if (mod) {
+				robot.keyTap(direction, mod);
+			} else {
+				robot.keyTap(direction);
+			}
 		}
 	}
 
 	this.delete = (lines) => {
 		this.move(1, 'down');
 		this.moveToBOL();
-		keyboard.press(robot.KEY_SHIFT);
-		this.move(lines, 'up');
-		keyboard.release(robot.KEY_SHIFT);
-		keyboard.click(robot.KEY_BACKSPACE);
-		keyboard.click(robot.KEY_LEFT);
+		this.move(lines, 'up', 'shift');
+		robot.keyTap('backspace');
+		robot.keyTap('left');
 		log('deleted');
 	}
 
 	this.paste = () => {
-		keyboard.press(robot.KEY_SYSTEM);
-		keyboard.click(robot.KEY_V);
-		keyboard.release(robot.KEY_SYSTEM);
+		robot.keyTap('v', 'command');
 	};
 }
 
