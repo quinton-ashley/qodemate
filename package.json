@@ -28,6 +28,7 @@
 		"p5": "^0.5.16",
 		"popper.js": "^1.14.1",
 		"pug": "^2.0.3",
+		"recursive-search": "^1.0.1",
 		"tether": "^1.4.3"
 	},
 	"description": "Presents code dynamically.",
@@ -58,5 +59,5 @@
 		"version": "git add -A",
 		"postversion": "git push && git push --tags"
 	},
-	"version": "0.0.13"
+	"version": "0.0.14"
 }
