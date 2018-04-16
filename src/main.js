@@ -1,4 +1,7 @@
 module.exports = function () {
-	const argv = require('minimist')(process.argv.slice(2));
-	require('../../qodemate-core')(argv._, argv);
+	let argv;
+	try {
+		argv = require('minimist')(process.argv.slice(2));
+	} catch (err) {}
+	require('../../qodemate-core')(((argv) ? argv._ : null), argv);
 };
