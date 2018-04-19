@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-// true if run independently
-// false if used as a module of another project
-if (require.main == module) {
-	require('./src/main.js')();
+const fs = require('fs');
+const isDev = fs.existsSync(__dirname + '/../qodemate-core');
+
+if (isDev) {
+	require('../qodemate-core')();
 } else {
-	module.exports = require('./src/main.js');
+	require('qodemate-core')();
 }
