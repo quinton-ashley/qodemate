@@ -60,5 +60,5 @@
 		"version": "git add -A",
 		"postversion": "git push && git push github && npm publish"
 	},
-	"version": "0.0.23"
+	"version": "0.0.24"
 }

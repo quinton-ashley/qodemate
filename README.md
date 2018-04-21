@@ -2,11 +2,12 @@
 
 Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!
 ## Goals and Ethos
-* Made for CS Educators, so that with minimal prep work they can give fancy, multi-file, non-sequential, step reproduction presentations (just like the ones on CodeAcademy and Hour of Code).
-* The ethos of Qodemate is to make the process of coding transparent.
-* Works with the fully featured IDEs you love (like Eclipse, Adobe Brackets, Xcode, etc.) and doesn't use a sandboxed webpage IDE.  Many sandboxed tutorial sites teach people the basics of programming well but they often have a lot of code running behind the scenes that users can't access.  Students that use sandboxed programming sites often don't know where to start when making their own projects offline.
-* Run projects locally on the user's computer so they can see all the files and modules in their project.  In addition to code reproduction, during a Qodemate presentation you can pull up docs, install packages, run commands, and even do a search on StackOverflow.
-* Students that use Qodemate get real world programming experience: how to get from a blank document of nothing to something or using packages to build a project greater than the sum of its parts.  Qodemate was designed so that teachers can purposefully show all the trial and error along the way.  Don't just teach your students to code, teach them the process of programming!
+* Made for CS Educators, so that with minimal prep work they can give fancy, multi-file, non-sequential, step reproduction presentations (like CodeAcademy).
+* The ethos of Qodemate is to make the process of coding transparent so CS educators can teach computer science, not just programming.
+* Works with the fully featured IDEs you love (like Eclipse, Adobe Brackets, Xcode, etc.) and doesn't use a sandboxed webpage IDE (CodeAcademy, Hour of Code, Code Studio).  Many sandboxed tutorial sites teach people the often oversimplified basics of programming.  They often have a lot of code running behind the scenes that users can't access.  This often results in students not knowing how to start their own projects outside of the site's sandboxed environment.
+* In addition to code reproduction, during a Qodemate presentation you can pull up docs, install packages, run commands, and even do a search on StackOverflow.
+* Projects are stored locally so everyone can see all the files and modules.
+* Students that use Qodemate get real world programming experience: how to get from a blank document of nothing to something or use packages to build a project greater than the sum of its parts.  Qodemate was designed so that teachers can purposefully show all the trial and error along the way.
 ## Why should I use Qodemate?
 ### Static Slide Presentations
 * require a lot of prep work
@@ -21,7 +22,7 @@ Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!
 * run code at any point during the presentation
 * no typing necessary, hit the spacebar or use a clicker like you would with a powerpoint
 ### Summary
-By using Qodemate you get all the benefits of static slide based presentations and live coding presentations and none of the disadvantages!  Still not convinced?  Take a look at the simple_sample.js and lesson.md files bellow and see how easy it is to section your code and write slides in markdown!
+Don't just teach your students programming, teach them the process of programming!  By using Qodemate you get all the benefits of static slide based presentations and live coding presentations and none of the disadvantages!  Still not convinced?  Take a look at the simple_sample.js and lesson.md files bellow and see how easy it is to section your code and write slides in markdown!
 ## Simple Sample Project
 ```javascript
 // simple_sample.js
