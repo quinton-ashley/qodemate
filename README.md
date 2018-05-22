@@ -56,8 +56,6 @@ $ npm start
 ## Getting Started
 ...  
 https://github.com/quinton-ashley/qodemate-test-files
-## Future Features
-### Presentation Syncing to Student Computers
-Another useful application of scripted presentation could be enabling students to run their teacher's presentation on their own computers during the lecture.  
+## Future Features 
 ### Video/Audio File Syncing
 Steps can also be synced to video tutorials on Youtube, vimeo, etc outside a classroom setting to create interactive tutorial experiences outside the classroom.
