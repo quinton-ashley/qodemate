@@ -1,5 +1,5 @@
 {
-  "author": "Quinton Ashley",
+  "author": "quinton-ashley",
   "bin": {
     "qodemate": "./app.js"
   },
@@ -13,16 +13,20 @@
     }
   ],
   "dependencies": {
-    "qodemate-core": "^0.0.19",
-    "qodemate-desktop": "^0.0.17",
-    "sidecar": "^1.0.5"
+    "get-open-apps": "^1.0.1",
+    "qodemate-core": "^0.0.20",
+    "qodemate-desktop": "^0.0.18",
+    "sidecar": "^1.0.8"
   },
   "description": "Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!",
   "devDependencies": {
-    "electron": "^1.8.7"
+    "electron": "^1.8.7",
+    "electron-rebuild": "^1.7.3"
   },
   "entry point": "app.js",
-  "keywords": [],
+  "keywords": [
+    "app"
+  ],
   "license": "UNLICENSED",
   "main": "app.js",
   "maintainers": [
@@ -42,5 +46,10 @@
     "version": "git add -A",
     "postversion": "git push && git push --tags && npm publish"
   },
-  "version": "0.0.26"
+  "version": "0.0.27",
+  "sidecars": [
+    "qodemate-desktop",
+    "qodemate-core",
+    "../pkg/get-open-apps"
+  ]
 }
