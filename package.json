@@ -13,15 +13,15 @@
     }
   ],
   "dependencies": {
-    "get-open-apps": "^1.0.1",
-    "qodemate-core": "^0.0.20",
-    "qodemate-desktop": "^0.0.18",
-    "sidecar": "^1.0.10"
+    "get-open-apps": "*",
+    "qodemate-core": "*",
+    "qodemate-desktop": "*",
+    "sidecar": "*"
   },
   "description": "Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!",
   "devDependencies": {
-    "electron": "^1.8.7",
-    "electron-rebuild": "^1.7.3"
+    "electron": "*",
+    "electron-rebuild": "*"
   },
   "entry point": "app.js",
   "keywords": [
@@ -46,7 +46,7 @@
     "version": "git add -A",
     "postversion": "git push && git push --tags && npm publish"
   },
-  "version": "0.0.27",
+  "version": "0.1.1",
   "sidecars": [
     "qodemate-desktop",
     "qodemate-core",
