@@ -54,24 +54,38 @@ Initialize our x and y variables.
 Let's make sure to log what we're doing in the console.
 ```
 
-## Installation
+## Installation Instructions for Developers
 
 Gotta see it to believe it? ~~Click on the releases tab and download the native Qodemate app for your OS.~~  **Qodemate is currently pre-beta, you must clone this repository and build yourself**
 
+Install the LTS version of node.js and npm.
+
+Windows Specific
+
+    $ npm install --global --production windows-build-tools
+
+macOS Specific
+
+    $ xcode-select --install
+
+All Systems
+
+    $ npm install --global node-gyp
     $ mkdir ~/Documents/dev
     $ cd ~/Documents/dev
     $ git clone https://github.com/quinton-ashley/qodemate.git
     $ cd qodemate
     $ npm i
+    $ npm i electron
     $ npm start
 
 ## How does it work?
 
-...
+Check out the wiki!  More pages are coming soon.
 
 ## Getting Started
 
-...  
+Download these test files.  Right now only the jsTestFolder will work.  
 <https://github.com/quinton-ashley/qodemate-test-files>
 
 ## Future Features

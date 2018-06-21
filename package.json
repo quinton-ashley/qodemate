@@ -16,7 +16,7 @@
     "get-open-apps": "^1.0.1",
     "qodemate-core": "^0.0.20",
     "qodemate-desktop": "^0.0.18",
-    "sidecar": "^1.0.8"
+    "sidecar": "^1.0.10"
   },
   "description": "Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!",
   "devDependencies": {
