@@ -14,6 +14,7 @@
   ],
   "dependencies": {
     "get-open-apps": "^1.0.1",
+    "ignore": "^4.0.2",
     "qodemate-core": "^0.1.2",
     "qodemate-desktop": "^0.1.2",
     "sidecar": "^1.0.11"
@@ -46,7 +47,7 @@
     "version": "git add -A",
     "postversion": "git push && git push --tags && npm publish"
   },
-  "version": "0.1.3",
+  "version": "0.1.4",
   "sidecars": [
     "qodemate-desktop",
     "qodemate-core",
