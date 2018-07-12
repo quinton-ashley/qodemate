@@ -44,10 +44,11 @@
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "up-outdated": "npm install --save $(npm outdated | cut -d ' ' -f -1 | sed '1d' | sed 's/$/@*/')",
     "version": "git add -A",
-    "postversion": "git push && git push --tags && npm publish"
+    "postversion": "git remote | xargs -L1 git push --all && git push --tags && npm publish"
   },
-  "version": "0.1.4",
+  "version": "0.1.5",
   "sidecars": [
     "qodemate-desktop",
     "qodemate-core",
