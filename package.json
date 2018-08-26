@@ -1,57 +1,47 @@
 {
-  "author": "quinton-ashley",
-  "bin": {
-    "qodemate": "./app.js"
-  },
-  "bugs": {
-    "url": "https://github.com/quinton-ashley/qodemate/issues"
-  },
-  "contributors": [
-    {
-      "name": "Quinton Ashley",
-      "email": "qashto@gmail.com"
-    }
-  ],
-  "dependencies": {
-    "get-open-apps": "^1.0.1",
-    "ignore": "^4.0.2",
-    "qodemate-core": "^0.1.2",
-    "qodemate-desktop": "^0.1.2",
-    "sidecar": "^1.0.11"
-  },
-  "description": "Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!",
-  "devDependencies": {
-    "electron": "^2.0.3",
-    "electron-rebuild": "^1.7.3"
-  },
-  "entry point": "app.js",
-  "keywords": [
-    "app"
-  ],
-  "license": "UNLICENSED",
-  "main": "app.js",
-  "maintainers": [
-    {
-      "name": "Quinton Ashley",
-      "email": "qashto@gmail.com"
-    }
-  ],
-  "name": "qodemate",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/quinton-ashley/qodemate.git"
-  },
-  "scripts": {
-    "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "up-outdated": "npm install --save $(npm outdated | cut -d ' ' -f -1 | sed '1d' | sed 's/$/@*/')",
-    "version": "git add -A",
-    "postversion": "git remote | xargs -L1 git push --all && git push --tags && npm publish"
-  },
-  "version": "0.1.6",
-  "sidecars": [
-    "qodemate-desktop",
-    "qodemate-core",
-    "../pkg/get-open-apps"
-  ]
+	"author": "quinton-ashley",
+	"bin": {
+		"qodemate": "./app.js"
+	},
+	"bugs": {
+		"url": "https://github.com/quinton-ashley/qodemate/issues"
+	},
+	"contributors": [
+		{
+			"name": "Quinton Ashley",
+			"email": "qashto@gmail.com"
+		}
+	],
+	"dependencies": {},
+	"description": "Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!",
+	"devDependencies": {
+		"electron": "^2.0.8",
+		"electron-rebuild": "^1.7.3"
+	},
+	"entry point": "app.js",
+	"keywords": [
+		"app"
+	],
+	"license": "UNLICENSED",
+	"main": "app.js",
+	"maintainers": [
+		{
+			"name": "Quinton Ashley",
+			"email": "qashto@gmail.com"
+		}
+	],
+	"name": "qodemate",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/quinton-ashley/qodemate.git"
+	},
+	"scripts": {
+		"start": "electron .",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"premiere": "O='{\"name\":\"'$npm_package_name'\",\"description\":\"'$npm_package_description'\",\"license_template\":\"'$npm_package_license'\"}' && echo \"${O}\" && curl -u $npm_package_author_name https://api.github.com/user/repos -d \"${O}\" && git init && git add -A && git commit -m $npm_package_version && git remote add origin 'https://github.com/'$npm_package_author_name'/'$npm_package_name'.git' && git pull origin master --allow-unrelated-histories --no-edit -q && git push --set-upstream origin master && git push && git push --tags",
+		"up-outdated": "npm install --save $(npm outdated | cut -d ' ' -f -1 | sed '1d' | sed 's/$/@*/')",
+		"version": "git add -A",
+		"postversion": "git remote | xargs -L1 git push --all && git push --tags && npm publish"
+	},
+	"version": "0.1.7"
 }

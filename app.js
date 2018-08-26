@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
 console.log('starting Qodemate!');
-require('sidecar');
+global.__rootDir = __dirname;
 require('qodemate-desktop')();
