@@ -1,0 +1,103 @@
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+.selected {
+  background-color: brown;
+  color: #FFF;
+}
+
+.hiddenRow {
+  padding: 0 !important;
+}
+
+.qm {
+  color: #670000;
+}
+
+.center {
+  text-align: center;
+}
+
+nav {
+  background-color: #3f0800;
+}
+
+div.progress-bar.qm {
+  color: #888c90;
+  background-color: #818c46;
+}
+
+a.qm:hover {
+  color: #fff;
+}
+
+a.qm {
+  color: #eee;
+}
+
+body.qm {
+  color: #eee;
+  background-color: #150900;
+}
+
+button.nav-link.btn.btn-secondary.qm {
+  color: #eee;
+  background-color: transparent;
+  border-top-width: 1px;
+  border-bottom-width: 5px;
+  border-left-width: 5px;
+  border-right-width: 1px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-style: solid;
+  border-color: #808080;
+  box-shadow: none;
+}
+
+/* need to implement inner border
+https://stackoverflow.com/questions/4839613/how-to-make-round-corners-to-both-inside-of-a-box-and-its-border
+*/
+
+button.nav-link.btn.btn-secondary.qm:hover {
+  color: #fff;
+  border-color: #999;
+}
+
+button.nav-link.btn.btn-secondary.qm:active {
+  color: #fff;
+  border-color: #aaa;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  margin-right: 8px;
+  margin-top: 4px;
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.nav-link small {
+  display: block;
+  font-size: 10px;
+}
+
+nav.qm, form.qm {
+  background-color: #ffffff;
+}
