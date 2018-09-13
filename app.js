@@ -3,7 +3,7 @@
 const log = console.log;
 
 log('starting Qodemate!');
-global.__rootDir = __dirname;
+global.__rootDir = __dirname.replace(/\\/g, '/');
 const {
 	app,
 	BrowserWindow
@@ -13,8 +13,8 @@ const path = require('path');
 const url = require('url');
 const locals = {
 	title: 'Qodemate',
-	__rootDir: global.__rootDir,
-	node_modules: path.join(__dirname, 'node_modules')
+	__rootDir: __rootDir,
+	node_modules: path.join(__rootDir + '/node_modules').replace(/\\/g, '/')
 };
 log(locals);
 const setupPug = require('electron-pug');
@@ -39,7 +39,7 @@ async function createWindow() {
 		height: 1000
 	})
 
-	mainWindow.loadURL(`file://${__dirname}/views/pug/index.pug`)
+	mainWindow.loadURL(`file://${__rootDir}/views/pug/index.pug`)
 
 	// Open the DevTools.
 	// mainWindow.webContents.openDevTools()
