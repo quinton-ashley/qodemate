@@ -7,6 +7,9 @@ const Bot = function() {
 	const log = console.log;
 	const err = console.error;
 
+	const {
+		app
+	} = require('electron').remote;
 	const delay = require('delay');
 	const ncp = require('copy-paste');
 	const open = require('opn');
@@ -20,25 +23,40 @@ const Bot = function() {
 	const linux = (osType == 'Linux');
 	const mac = (osType == 'Darwin');
 	const win = (osType == 'Windows_NT');
+	let command;
+	if (mac) {
+		command = 'command';
+	} else if (win) {
+		command = 'control';
+	}
 	const robot = require('robotjs');
-	// robot.setKeyboardDelay(10);
+	robot.setKeyboardDelay(0);
+
 	let qodemate = {
 		name: 'Qodemate',
-		path: path.join(global.__rootDir,
-			'node_modules/electron/dist/Electron.app')
+		path: app.getPath('exe')
 	};
+	log(qodemate);
 	let qoapp;
 
 	this.focusOnQodemate = async function() {
-		await open(qodemate.path, {
-			wait: false
-		});
+		if (mac) {
+			await open(qodemate.path, {
+				wait: false
+			});
+		} else if (win) {
+			robot.keyTap('tab', 'alt');
+		}
 	}
 
 	this.focusOnQoApp = async function() {
-		await open(qoapp.path, {
-			wait: false
-		});
+		if (mac) {
+			await open(qoapp.path, {
+				wait: false
+			});
+		} else if (win) {
+			robot.keyTap('tab', 'alt');
+		}
 		await delay(1000);
 	}
 
@@ -98,7 +116,7 @@ const Bot = function() {
 			case 'Eclipse':
 			case 'Eclipse Java':
 				await this.focusOnQoApp();
-				robot.keyTap('3', 'command');
+				robot.keyTap('3', command);
 				await delay(1000);
 				await this.copy('import existing projects into');
 				this.paste();
@@ -129,9 +147,13 @@ const Bot = function() {
 		switch (qoapp.name) {
 			case 'Atom':
 				await this.focusOnQoApp();
-				robot.keyTap('p', 'command');
-				await this.copy(path.relative(__usrDir, file).replace(/^.*\//gm, ''));
-				this.paste();
+				robot.keyTap('p', command);
+				let fileRelPath = path.relative(__usrDir,
+					file).replace(/\\/g, '/');
+				fileRelPath = fileRelPath.replace(/^[^\/]*\//, '');
+				log(fileRelPath);
+				await this.copy(fileRelPath);
+				await this.paste();
 				robot.keyTap('enter');
 				break;
 			default:
@@ -148,34 +170,50 @@ const Bot = function() {
 			case 'Atom':
 				break;
 			default:
-				robot.keyTap('r', 'command');
+				robot.keyTap('r', command);
 		}
 	}
 
 	this.clear = function() {
 		log('clear file contents');
-		robot.keyTap('a', 'command');
+		robot.keyTap('a', command);
 		robot.keyTap('backspace');
 	}
 
 	this.moveToStart = () => {
 		log('moved to Start');
-		robot.keyTap('up', 'command');
+		if (mac) {
+			robot.keyTap('up', command);
+		} else if (win) {
+			robot.keyTap('home', command);
+		}
 	}
 
 	this.moveToEnd = () => {
 		log('moved to End');
-		robot.keyTap('down', 'command');
+		if (mac) {
+			robot.keyTap('down', command);
+		} else if (win) {
+			robot.keyTap('end', command);
+		}
 	}
 
 	this.moveToBOL = () => {
 		log('moved to BOL');
-		robot.keyTap('left', 'command');
+		if (mac) {
+			robot.keyTap('left', command);
+		} else if (win) {
+			robot.keyTap('home');
+		}
 	}
 
 	this.moveToEOL = () => {
 		log('moved to EOL');
-		robot.keyTap('right', 'command');
+		if (mac) {
+			robot.keyTap('right', command);
+		} else if (win) {
+			robot.keyTap('end');
+		}
 	}
 
 	this.move = (lines, direction, mod) => {
@@ -203,8 +241,9 @@ const Bot = function() {
 		await awaitCopy(text);
 	};
 
-	this.paste = () => {
-		robot.keyTap('v', 'command');
+	this.paste = async function() {
+		robot.keyTap('v', command);
+		await delay(500);
 	};
 }
 

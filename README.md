@@ -18,7 +18,9 @@ Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!
 -   require a lot of prep work
 -   slides can only contain static screenshots or excerpts of code
 -   can't run the program at different points during the presentation
-    ### Live Coding Presentations
+
+### Live Coding Presentations
+
 -   must be done from memory or improvised
 -   teaching a class at the same time can be difficult
 -   forces you to sit/stand behind a computer during class
@@ -62,7 +64,7 @@ Install the LTS version of node.js and npm.
 
 Windows Specific
 
-    $ npm install --global --production windows-build-tools
+    $ npm i -g windows-build-tools
 
 macOS Specific
 
@@ -70,13 +72,10 @@ macOS Specific
 
 All Systems
 
-    $ npm install --global node-gyp
-    $ mkdir ~/Documents/dev
-    $ cd ~/Documents/dev
     $ git clone https://github.com/quinton-ashley/qodemate.git
     $ cd qodemate
+    $ npm i -g node-gyp
     $ npm i
-    $ npm i electron
     $ npm start
 
 ## How does it work?

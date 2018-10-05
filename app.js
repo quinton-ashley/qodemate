@@ -13,8 +13,8 @@ const path = require('path');
 const url = require('url');
 const locals = {
 	title: 'Qodemate',
-	__rootDir: global.__rootDir,
-	node_modules: path.join(__dirname, 'node_modules')
+	__rootDir: global.__rootDir.replace(/\\/g, '/'),
+	node_modules: path.join(__dirname, 'node_modules').replace(/\\/g, '/')
 };
 log(locals);
 const setupPug = require('electron-pug');

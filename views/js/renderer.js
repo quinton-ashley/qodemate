@@ -24,9 +24,9 @@ module.exports = function(opt) {
 	window.Tether = require('tether');
 	window.Bootstrap = require('bootstrap');
 
-	global.__usrDir = os.homedir() + '/Documents/Qodemate';
+	global.__usrDir = os.homedir().replace(/\\/g, '/') + '/Documents/Qodemate';
 
-	const Presenter = require('qodemate-core');
+	const Presenter = require('./core.js');
 	let ent = new Presenter({
 		bot: require('./bot.js')
 	});
