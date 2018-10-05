@@ -3,7 +3,7 @@
 const log = console.log;
 
 log('starting Qodemate!');
-global.__rootDir = __dirname;
+global.__rootDir = __dirname.replace(/\\/g, '/');
 const {
 	app,
 	BrowserWindow
@@ -39,7 +39,7 @@ async function createWindow() {
 		height: 1000
 	})
 
-	mainWindow.loadURL(`file://${__dirname}/views/pug/index.pug`)
+	mainWindow.loadURL(`file://${__rootDir}/views/pug/index.pug`)
 
 	// Open the DevTools.
 	// mainWindow.webContents.openDevTools()
