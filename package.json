@@ -9,20 +9,65 @@
 	"build": {
 		"appId": "com.qashto.qodemate",
 		"copyright": "Copyright © 2018 Quinton Ashley",
+		"nodeGypRebuild": true,
 		"mac": {
 			"category": "public.app-category.education",
-			"target": "zip",
+			"target": [
+				{
+					"target": "dmg",
+					"arch": [
+						"x64"
+					]
+				},
+				{
+					"target": "zip",
+					"arch": [
+						"x64"
+					]
+				}
+			],
+			"publish": [
+				"github"
+			]
+		},
+		"linux": {
+			"target": [
+				{
+					"target": "AppImage",
+					"arch": [
+						"x64"
+					]
+				},
+				{
+					"target": "zip",
+					"arch": [
+						"x64"
+					]
+				}
+			],
 			"publish": [
 				"github"
 			]
 		},
 		"win": {
-			"target": "zip",
+			"target": [
+				{
+					"target": "nsis",
+					"arch": [
+						"x64"
+					]
+				},
+				{
+					"target": "zip",
+					"arch": [
+						"x64"
+					]
+				}
+			],
 			"publish": [
 				"github"
 			]
-		},
-		"nodeGypRebuild": true
+		}
 	},
 	"contributors": [
 		{
@@ -35,30 +80,27 @@
 		"bootstrap": "^4.1.1",
 		"copy-paste": "^1.3.0",
 		"csv-string": "^3.1.5",
-		"delay": "^4.0.1",
+		"delay": "^4.1.0",
 		"electron-pug": "^2.0.0",
-		"fs-extra": "^7.0.0",
-		"get-open-apps": "^1.0.5",
+		"fs-extra": "^7.0.1",
+		"get-open-apps": "^1.0.6",
 		"gitignore-globs": "^0.1.1",
 		"gitignore-templates": "0.0.6",
-		"ignore": "^5.0.2",
+		"ignore": "^5.0.4",
 		"jquery": "^3.3.1",
 		"klaw-sync": "^6.0.0",
 		"markdown-it": "^8.4.1",
-		"material-design-icons-iconfont": "^3.0.3",
+		"material-design-icons-iconfont": "^4.0.2",
 		"moment": "^2.22.2",
 		"opn": "^5.4.0",
 		"p5": "^0.7.1",
-		"popper.js": "^1.14.3",
+		"popper.js": "^1.14.5",
 		"pug": "^2.0.3",
 		"robotjs": "^0.5.1",
-		"sidecar": "^1.0.11",
 		"tether": "^1.4.4"
 	},
 	"description": "Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!",
-	"devDependencies": {
-		"electron": "^3.0.2"
-	},
+	"devDependencies": {},
 	"entry point": "app.js",
 	"keywords": [
 		"app"
@@ -84,10 +126,11 @@
 		"rebuild": "npm rebuild --runtime=electron --target=3.0.2 --disturl=https://atom.io/download/atom-shell --abi=64",
 		"pack": "electron-builder --dir",
 		"dist": "electron-builder",
+		"pgh": "electron-builder -p always",
 		"postinstall": "electron-builder install-app-deps",
 		"v": "npm version patch --force",
 		"version": "git add -A",
 		"postversion": "git remote | xargs -L1 git push --all && git push --tags && npm publish"
 	},
-	"version": "0.1.13"
+	"version": "0.1.14"
 }

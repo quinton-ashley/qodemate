@@ -1,6 +1,7 @@
 .DS_Store
-dev/*
-node_modules/*
-dist/*
+dev
+node_modules
+dist
 build/*
+!build/icon.png
 *.log
