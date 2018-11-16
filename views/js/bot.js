@@ -33,14 +33,11 @@ const Bot = function() {
 	robot.setKeyboardDelay(0);
 
 	let qodemate = {
-		name: 'Qodemate'
+		name: 'Qodemate',
+		path: app.getPath('exe')
 	};
 	if (mac) {
-		qodemate.path = app.getPath('exe').replace(/\/Contents\/MacOS\/Electron/gi, '');
-	} else if (win) {
-		qodemate.path = app.getPath('exe');
-	} else if (linux) {
-		qodemate.path = app.getPath('exe');
+		qodemate.path = qodemate.path.replace(/\/Contents\/MacOS\/(Electron|qodemate)/gi, '');
 	}
 	log(qodemate);
 	let qoapp;
