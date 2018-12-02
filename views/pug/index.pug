@@ -4,14 +4,15 @@ html
 head
 link(rel='stylesheet' type='text/css' href=node_modules + '/material-design-icons-iconfont/dist/material-design-icons.css')
 link(rel='stylesheet' type='text/css' href=node_modules + '/bootstrap/dist/css/bootstrap.min.css')
+link(rel='stylesheet' type='text/css' href='../css/contro-ui.css')
 link(rel='stylesheet' type='text/css' href='../css/style.css')
 title= title
 
-body.qm
+body
 nav.navbar.fixed-bottom
 	ul.nav.justify-content-left
 	ul.nav.justify-content-center
-		li.nav-item: button#bigButton.nav-link.btn.btn-secondary.qm.center(style='width:25vw')
+		li.nav-item: button#bigButton.btn
 			i#play.material-icons.md-light play_arrow
 			i#open.material-icons.md-light folder_open
 			i#mini.material-icons.md-light picture_in_picture

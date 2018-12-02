@@ -11,6 +11,8 @@ module.exports = function(opt) {
 	const {
 		app
 	} = require('electron').remote;
+	const cui = require('./contro-ui.js');
+	const elec = require('./electronWrap.js');
 	const bot = opt.bot;
 	const delay = require('delay');
 	const fs = require('fs-extra');
