@@ -58,7 +58,7 @@ a {
 	color: #eee;
 }
 
-nav button.btn {
+nav .uie {
 	color: #eee;
 	background-color: transparent;
 	border-top-width: 0.25rem;
@@ -79,12 +79,12 @@ nav button.btn {
 /* need to implement inner border
 https://stackoverflow.com/questions/4839613/how-to-make-round-corners-to-both-inside-of-a-box-and-its-border
 */
-nav button:hover {
+nav .uie:hover {
 	color: #fff;
 	border-color: #999;
 }
 
-nav button:active {
+nav .uie:active {
 	color: #fff;
 	border-color: #aaa;
 	border-bottom-width: 0.25rem;

@@ -1,50 +1,108 @@
-:root {
-	--color: rgb(130, 130, 130);
-	--text-color: rgb(70, 70, 70);
+.material-icons {
+	font-family: 'Material Icons';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 24px;
+	/* Preferred icon size */
+	display: inline-block;
+	line-height: 1;
+	text-transform: none;
+	letter-spacing: normal;
+	word-wrap: normal;
+	white-space: nowrap;
+	direction: ltr;
+	/* Support for all WebKit browsers. */
+	-webkit-font-smoothing: antialiased;
+	/* Support for Safari and Chrome. */
+	text-rendering: optimizeLegibility;
+	/* Support for Firefox. */
+	-moz-osx-font-smoothing: grayscale;
+	/* Support for IE. */
+	font-feature-settings: 'liga';
 }
 
-.uie.no-outline {
-	outline: none!important;
+body,
+html {
+	color: #eee;
+	background-color: #150900;
 }
 
-.menu {
-	position: fixed;
-	z-index: 100;
-	width: 50vw;
-	padding-top: 2vh;
-	padding-bottom: 2vh;
-	margin-left: 25vw;
-	margin-top: 5vh;
-	text-align: left;
-	display: none;
+.selected {
+	background-color: brown;
+	color: #FFF;
 }
 
-.menu code,
-.menu pre {
-	font-size: 1.5vh;
+.hiddenRow {
+	padding: 0 !important;
 }
 
-.menu p {
-	margin-left: 5%;
-	margin-right: 5%;
-	font-size: 2vh;
-}
-
-.menu h1 {
+.center {
 	text-align: center;
-	font-size: 4vh;
 }
 
-.menu .uie {
-	margin: 0;
-	font-size: 4vh;
-	text-align: center;
-	border: 3px solid var(--text-color);
-	border-radius: 10px;
-	box-shadow: 0.5px 0.5px 0 rgba(255, 255, 255, .5);
+nav {
+	background-color: #3f0800!important;
+	height: 10vh;
 }
 
-.menu .cursor {
-	background-color: var(--color);
-	filter: brightness(1.2);
+.progress-bar {
+	color: #888c90;
+	background-color: #818c46;
+}
+
+a:hover {
+	color: #fff;
+}
+
+a {
+	color: #eee;
+}
+
+nav .uie {
+	color: #eee;
+	background-color: transparent;
+	border-top-width: 0.25rem;
+	border-bottom-width: 1rem;
+	border-left-width: 0.75rem;
+	border-right-width: 0.25rem;
+	margin-left: 1rem;
+	margin-right: 1rem;
+	border-style: solid;
+	border-color: #808080;
+	box-shadow: none;
+	height: 8vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#bigButton {
+	width: 25vw;
+}
+/* need to implement inner border
+https://stackoverflow.com/questions/4839613/how-to-make-round-corners-to-both-inside-of-a-box-and-its-border
+*/
+nav .uie:hover {
+	color: #fff;
+	border-color: #999;
+}
+
+nav .uie:active {
+	color: #fff;
+	border-color: #aaa;
+	border-bottom-width: 0.25rem;
+	border-left-width: 0.25rem;
+	margin-right: 1.25rem;
+	margin-top: 0.5rem;
+	background-color: rgba(255, 0, 0, 0.1);
+}
+
+.nav-link small {
+	display: block;
+	font-size: 10px;
+}
+
+form,
+nav {
+	background-color: #ffffff;
 }

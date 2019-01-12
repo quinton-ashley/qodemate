@@ -26,7 +26,7 @@ module.exports = function(opt) {
 
 	global.__usrDir = os.homedir().replace(/\\/g, '/') + '/Documents/Qodemate';
 
-	const Presenter = require('./core.js');
+	const Presenter = require('./qodemate-presenter.js');
 	let ent = new Presenter({
 		bot: require('./bot.js')
 	});

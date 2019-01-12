@@ -1,24 +1,21 @@
 const CUI = function() {
-	let opt = {
+	let opt = this.opt = {
 		v: true
 	};
 	const log = console.log;
-	// const {
-	// 	Mouse,
-	// 	Keyboard,
-	// 	Gamepad,
-	// 	or,
-	// 	and
-	// } = require('contro');
-	// let gamepad = new Gamepad();
-	let gamepad = {
-		isConnected: () => {
-			return false;
-		},
-		button: (thing) => {
-			return {};
-		}
-	};
+	const {
+		Mouse,
+		Keyboard,
+		Gamepad,
+		or,
+		and
+	} = require('contro');
+	let gamepad = new Gamepad();
+	// let gamepad = {
+	// 	isConnected: () => {
+	// 		return false;
+	// 	}
+	// };
 	let gamepadConnected = false;
 	let btnNames = [
 		'a', 'b', 'x', 'y',
@@ -39,6 +36,7 @@ const CUI = function() {
 	let mouse;
 	let mouseWheelDeltaNSS;
 	let pos = 0;
+	let uiPrevStates = [];
 	let uiPrev;
 	let ui;
 	let uiSub;
@@ -46,38 +44,140 @@ const CUI = function() {
 	for (let i of btnNames) {
 		btnStates[i] = false;
 	}
-	let gvMainMenuLabels = {
-		x: 'power',
-		y: 'reset',
-		b: 'open'
+
+	let map = {};
+	const remappingProfiles = {
+		Xbox_PS_Adaptive: {
+			map: {
+				a: 'b',
+				b: 'a',
+				x: 'y',
+				y: 'x'
+			},
+			disable: 'ps|xbox|pc'
+		},
+		Nintendo_Adaptive: {
+			map: {
+				a: 'b',
+				b: 'a',
+				x: 'y',
+				y: 'x'
+			},
+			enable: 'ps|xbox|pc'
+		},
+		Xbox_PS_Consistent: {
+			map: {
+				a: 'b',
+				b: 'a',
+				x: 'y',
+				y: 'x'
+			}
+		},
+		Nintendo_Consistent: {
+			map: {
+				a: 'b',
+				b: 'a',
+				x: 'y',
+				y: 'x'
+			}
+		},
+		Xbox_PS_None: {
+			map: {}
+		},
+		Nintendo_None: {
+			map: {}
+		}
 	};
 
-	// Xbox One controller mapped to
-	// Nintendo Switch controller button layout
-	//  Y B  ->  X A
-	// X A  ->  Y B
-	let map = {
-		a: 'b',
-		b: 'a',
-		x: 'y',
-		y: 'x'
-	};
+	this.mapButtons = function(gamepad, session, normalize) {
+		let prof = remappingProfiles[gamepad.profile];
+		if (!prof) {
+			prof = remappingProfiles['Xbox_PS_Adaptive'];
+		}
+		let sys = session.sys;
+		let enable;
+		if (prof.enable) {
+			enable = new RegExp(`(${prof.enable})`, 'i');
+		}
+		let disable;
+		if (prof.disable) {
+			disable = new RegExp(`(${prof.disable})`, 'i');
+		}
+		// Xbox/PS Adaptive profile usage example:
+
+		// User is currently browsing their Nintendo Switch library
+		// Xbox One controller is mapped to
+		// Nintendo Switch controller button layout
+		//  Y B  ->  X A
+		// X A  ->  Y B
+
+		// When browsing Xbox 360 games no mapping occurs
+		//  Y B  ->  Y B
+		// X A  ->  X A
+
+		// When browsing PS3 games no mapping occurs either
+		// since A(Xbox One) auto maps to X(PS3)
+		//  Y B  ->  △ ○
+		// X A  ->  □ X
+		if ((!enable || enable.test(sys)) && (!disable || !disable.test(sys))) {
+			// log('controller remapping enabled for ' + sys);
+			map = {};
+			for (let i in prof.map) {
+				map[i] = gamepad.map[prof.map[i]] || prof.map[i];
+			}
+		} else {
+			// log('no controller remapping for ' + sys);
+			map = {};
+		}
+
+		// normalize X and Y to nintendo physical layout
+		// this will make the physical layout of an app consistent
+		// and doAction choices consistent for certain buttons
+		if (normalize &&
+			((normalize.disable &&
+					!(new RegExp(`(${normalize.disable})`, 'i')).test(gamepad.profile)) ||
+				(normalize.enable &&
+					(new RegExp(`(${normalize.enable})`, 'i')).test(gamepad.profile))
+			)) {
+			for (let i in normalize.map) {
+				map[i] = gamepad.map[normalize.map[i]] || normalize.map[i];
+			}
+		}
+	}
 
 	let customActions = () => {
 		log('set custom actions with the setCustomActions method');
 	};
 	let doAction = (act) => {
-		if (act == 'error-okay') {
-			if ((/back/gi).test(uiPrev)) {
-				this.uiStateChange('libMain');
+		if (act == 'error-okay' || act == 'back') {
+			if (uiPrev) {
+				for (let i = uiPrevStates.length - 1; i >= 0; i--) {
+					if (!(/menu/i).test(uiPrevStates[i]) && ui != uiPrevStates[i]) {
+						this.uiStateChange(uiPrevStates[i]);
+						break;
+					}
+				}
 			} else {
-				this.uiStateChange(uiPrev);
+				for (let state of uiPrevStates) {
+					if ((/main/i).test(state)) {
+						this.uiStateChange(state);
+						break;
+					}
+				}
 			}
-			scrollToCursor(10, 0);
 		} else {
 			customActions(act, this.btns.includes(act));
 		}
 	};
+	this.doAction = doAction;
+
+	let customHeldActions = () => {
+		log('set custom actions with the setCustomHeldActions method');
+	};
+	let doHeldAction = (act, timeHeld) => {
+		customHeldActions(act, this.btns.includes(act), timeHeld);
+	};
+	this.doHeldAction = doHeldAction;
 
 	let resize = () => {
 		log('set custom resize with the setResize method');
@@ -95,12 +195,7 @@ const CUI = function() {
 		state = state || ui;
 		if ((/menu/gi).test(state)) {
 			let $menu = $('#' + state);
-			$('.menu').hide();
-			$menu.show();
 			$menu.css('margin-top', $(window).height() * .5 - $menu.outerHeight() * .5);
-			if (state != ui) {
-				makeCursor($('#' + state).find('.row-y').eq(0).children().eq(0), state);
-			}
 		}
 		resize(adjust);
 	}
@@ -116,7 +211,7 @@ const CUI = function() {
 
 	function scrollTo(position, time) {
 		if (isNaN(position)) {
-			log("pos can't be: " + position);
+			log(`pos can't be: ` + position);
 			return;
 		}
 		pos = position;
@@ -157,35 +252,13 @@ const CUI = function() {
 		if (scrollDist < $(window).height() * minDistance) {
 			return;
 		}
-		let sTime = time || ($(window).height() * 2 - $cur.height()) / 5;
-		if (!time && scrollDist > $cur.height() * 1.1) {
+		let sTime = ((time > -1) ? time || 1 : ($(window).height() * 2 - $cur.height()) / 5);
+		if (time == undefined && scrollDist > $cur.height() * 1.1) {
 			sTime += scrollDist;
 		}
 		scrollTo(position, sTime);
 	}
 	this.scrollToCursor = scrollToCursor;
-
-	function coverClicked() {
-		let classes = $cur.attr('class').split(' ');
-		if (classes.includes('uie-disabled')) {
-			return false;
-		}
-		let $reel = $cur.parent();
-		scrollToCursor(1000, 0);
-		$cur.toggleClass('selected');
-		$reel.toggleClass('selected');
-		$('.reel').toggleClass('bg');
-		// $('nav').toggleClass('gamestate');
-		if ($cur.hasClass('selected')) {
-			$reel.css('left', `${$(window).width()*.5-$cur.width()*.5}px`);
-			$cur.css('transform', `scale(${$(window).height()/$cur.height()})`);
-		} else {
-			$reel.css('left', '');
-			$cur.css('transform', '');
-		}
-		return true;
-	}
-	this.coverClicked = coverClicked;
 
 	function removeCursor() {
 		if (!$cur) {
@@ -209,13 +282,19 @@ const CUI = function() {
 	}
 	this.makeCursor = makeCursor;
 
-	function addView(state) {
-		$(`#${state} .uie`).click(uieClicked);
+	function addView(state, opt) {
+		cuis[state] = opt;
+		$(`#${state} .uie`).off('click').click(uieClicked);
+		$(`#${state} .uie`).off('hover').hover(uieHovered);
 	}
 	this.addView = addView;
 
 	function removeView(state) {
 		$('#' + state).empty();
+		if ((/main/i).test(state)) {
+			uiPrev = null;
+			this.uiPrev = null;
+		}
 	}
 	this.removeView = removeView;
 
@@ -227,39 +306,55 @@ const CUI = function() {
 		uiOnChange = func;
 	};
 
-	function uiStateChange(state, subState) {
+	function uiStateChange(state, subState, opt) {
+		opt = opt || {};
 		if (state == ui) {
 			log('b ' + state);
 			doAction('b');
 			return;
 		}
-		uiOnChange(state, subState || uiSub);
+		uiOnChange(state, subState || uiSub, gamepadConnected);
+		if ((/main/gi).test(state)) {
+			if (ui == 'errMenu' || (!(/select/gi).test(ui) && !(/menu/gi).test(ui))) {
+				let $mid = $('#' + state + ' .reel.r0').children();
+				$mid = $mid.eq(Math.round($mid.length * .5) - 1);
+				makeCursor($mid, state);
+			} else {
+				makeCursor(cuis[state].$cur, state);
+			}
+			scrollToCursor(0, 0);
+		} else if ((/select/gi).test(state)) {
+			makeCursor(cuis[ui].$cur, state);
+		} else {
+			let $temp = $('#' + state).find('.row-y').eq(0).find('.uie').eq(0);
+			if (!$temp.length) {
+				$temp = $('#' + state).find('.row-x').eq(0).find('.uie').eq(0);
+			}
+			makeCursor($temp, state);
+		}
 		if (subState) {
 			$('#' + state).removeClass(uiSub || 'XXXXX');
 			$('#' + state).addClass(subState);
 		}
-		if ((/cover/gi).test(state)) {
-			makeCursor(cuis[ui].$cur, state);
-		} else if (state == 'sysMenu' || state == 'pauseMenu') {
-			labels = ['', '', 'Back'];
-		} else if ((/main/gi).test(state)) {
-			$('.menu').hide();
-			if (ui == 'errMenu' || (!(/cover/gi).test(ui) && !(/menu/gi).test(ui))) {
-				let $mid = $('#' + state + ' .reel.r0').children();
-				$mid = $mid.eq(Math.round($mid.length * .5) - 1);
-				makeCursor($mid, state);
-				scrollToCursor(10, 0);
-			} else {
-				makeCursor(cuis[state].$cur, state);
-			}
-		}
 		this.resize(true, state);
+		if (!opt.b && !opt.keepBackground &&
+			!(/select/gi).test(state) && !(/menu/gi).test(state) || (/menu/gi).test(ui)) {
+			// $('.cui:not(.main)').hide();
+			$('#' + ui).hide();
+		} else {
+			// log('keeping prev ui in background');
+		}
+		$('#' + state).show();
+		if (ui) {
+			uiPrevStates.push(ui);
+		}
 		uiPrev = ui;
 		ui = state;
 		uiSub = subState || uiSub;
-		this.ui = state;
-		if (opt.v) {
-			log('ui state: ' + state);
+		this.ui = ui;
+		this.uiPrev = uiPrev;
+		if (this.opt.v) {
+			log('ui state changed from ' + uiPrev + ' to ' + state);
 		}
 	}
 	this.uiStateChange = uiStateChange;
@@ -275,7 +370,9 @@ const CUI = function() {
 	this.uieClicked = uieClicked;
 
 	function uieHovered() {
-		makeCursor($(this));
+		if (!cuis[ui].hoverCurDisable) {
+			makeCursor($(this));
+		}
 	}
 	this.uieHovered = uieHovered;
 
@@ -389,6 +486,38 @@ const CUI = function() {
 	}
 	this.buttonPressed = buttonPressed;
 
+	async function buttonHeld(btn) {
+		if (typeof btn == 'string') {
+			btn = {
+				label: btn
+			};
+		}
+		let lbl = btn.label.toLowerCase();
+		log(ui);
+		switch (lbl) {
+			case 'a':
+				await doHeldAction($cur.attr('name') || 'a');
+				break;
+			case 'up':
+			case 'down':
+			case 'left':
+			case 'right':
+			case 'b':
+			case 'x':
+			case 'y':
+			case 'view':
+			case 'start':
+				await doHeldAction(lbl);
+				break;
+			default:
+				if (opt.v) {
+					log('button does nothing');
+				}
+				return;
+		}
+	}
+	this.buttonHeld = buttonHeld;
+
 	async function loop() {
 		if (gamepadConnected || gamepad.isConnected()) {
 			for (let i in btns) {
@@ -398,11 +527,7 @@ const CUI = function() {
 				i = map[i] || i;
 
 				if (!gamepadConnected) {
-					let $button;
-
-					$button = $('#' + gvMainMenuLabels[i]);
-
-					$button.text(i.toUpperCase());
+					uiOnChange(ui, uiSub, true);
 					$('html').addClass('cui-gamepadConnected');
 				}
 				let query = btn.query();
@@ -410,18 +535,20 @@ const CUI = function() {
 				if (!btnStates[i] && !query) {
 					continue;
 				}
-				// if button is held, query is true and unchanged
-				if (btnStates[i] && query) {
-					// log(i + ' button press held');
-					continue;
-				}
-				// save button state change
-				btnStates[i] = query;
 				// if button press ended query is false
 				if (!query) {
 					// log(i + ' button press end');
+					btnStates[i] = 0;
 					continue;
 				}
+				// if button is held, query is true and unchanged
+				if (btnStates[i] && query) {
+					btnStates[i] += 1;
+					await buttonHeld(i, btnStates[i]);
+					continue;
+				}
+				// save button state change
+				btnStates[i] += 1;
 				// if button press just started, query is true
 				if (opt.v) {
 					log(i + ' button press start');
@@ -459,8 +586,8 @@ const CUI = function() {
 	}
 	this.start = function(options) {
 		opt = options || {};
-		$('.menu .uie').click(uieClicked);
-		$('.menu .uie').hover(uieHovered);
+		$('.cui .uie').off('click').click(uieClicked);
+		$('.cui .uie').off('hover').hover(uieHovered);
 		loop();
 		$(window).resize(this.resize);
 	};
@@ -489,7 +616,7 @@ const CUI = function() {
 		log(msg);
 		let $errMenu = $('#errMenu');
 		if (!$errMenu.length) {
-			$('body').append(pug('#errMenu.menu: .row-y: .uie(name="error-okay") Okay'));
+			$('body').append(pug(`#errMenu.menu: .row-y: .uie(name='error-okay') Okay`));
 			$errMenu = $('#errMenu');
 			$errMenu.prepend(md('# Error  \n' + 'unknown error'));
 			$('#errMenu .uie').click(uieClicked);
