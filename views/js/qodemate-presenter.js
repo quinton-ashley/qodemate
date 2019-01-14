@@ -11,7 +11,6 @@ module.exports = function(opt) {
 	const {
 		app
 	} = require('electron').remote;
-	const cui = require('./contro-ui.js');
 	const elec = require('./electronWrap.js');
 	const bot = opt.bot;
 	const delay = require('delay');
@@ -37,6 +36,7 @@ module.exports = function(opt) {
 		});
 	};
 
+	const cui = require('./contro-ui.js');
 	let qm = require('./qodemate-core.js');
 
 	let usrFiles = [];

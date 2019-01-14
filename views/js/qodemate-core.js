@@ -11,7 +11,7 @@ let qode, seq, set, setIdx, setIdxs, cur, past, steps, stepItr;
 let lessons, slideItr, check, allFilesAdded, fIdx;
 
 class Qodemate {
-	constructor() {
+	reset() {
 		qode = [];
 		// the sequence array stores step parts in the order they occur in
 		// the file(s)
@@ -33,6 +33,10 @@ class Qodemate {
 		check = false;
 		allFilesAdded = false;
 		fIdx = -1;
+	}
+
+	constructor() {
+		this.reset();
 	}
 
 	restart() {
