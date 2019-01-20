@@ -17,12 +17,6 @@
       "category": "public.app-category.education",
       "target": [
         {
-          "target": "dmg",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
           "target": "zip",
           "arch": [
             "x64"
@@ -129,12 +123,12 @@
     "premiere": "O='{\"name\":\"'$npm_package_name'\",\"description\":\"'$npm_package_description'\",\"license_template\":\"'$npm_package_license'\"}' && echo \"${O}\" && curl -u $npm_package_author_name https://api.github.com/user/repos -d \"${O}\" && git init && git add -A && git commit -m $npm_package_version && git remote add origin 'https://github.com/'$npm_package_author_name'/'$npm_package_name'.git' && git pull origin master --allow-unrelated-histories --no-edit -q && git push --set-upstream origin master && git push && git push --tags",
     "up-outdated": "npm install --save $(npm outdated | cut -d ' ' -f -1 | sed '1d' | sed 's/$/@*/')",
     "rebuild": "npm rebuild --build-from-source --runtime=electron --target=4.0.1 --disturl=https://atom.io/download/atom-shell --abi=64",
-    "dist": "node-gyp configure | node-gyp build | electron-builder",
+    "dist": "node-gyp configure | node-gyp build | electron-builder -m -l -w",
     "pgh": "node-gyp configure | node-gyp build | electron-builder -p always",
     "postinstall": "electron-builder install-app-deps",
     "v": "npm version patch --force",
     "version": "git add -A",
     "postversion": "git remote | xargs -L1 git push --all && git push --tags && npm publish"
   },
-  "version": "0.1.20"
+  "version": "0.1.21"
 }

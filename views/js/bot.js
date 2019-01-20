@@ -12,12 +12,13 @@ const Bot = function() {
 	} = require('electron').remote;
 	const delay = require('delay');
 	const ncp = require('copy-paste');
-	const open = require('opn');
+	const opn = require('opn');
 	const os = require('os');
 	const {
 		promisify
 	} = require('util');
 	const path = require('path');
+	const spawn = require('await-spawn');
 	const awaitCopy = promisify(ncp.copy);
 	const osType = os.type();
 	const linux = (osType == 'Linux');
@@ -26,7 +27,7 @@ const Bot = function() {
 	let command;
 	if (mac) {
 		command = 'command';
-	} else if (win) {
+	} else if (win || linux) {
 		command = 'control';
 	}
 	const robot = require('robotjs');
@@ -44,20 +45,20 @@ const Bot = function() {
 
 	this.focusOnQodemate = async function() {
 		if (mac) {
-			await open(qodemate.path, {
+			await opn(qoapp.cmd[0], {
 				wait: false
 			});
-		} else if (win) {
+		} else {
 			robot.keyTap('tab', 'alt');
 		}
 	}
 
 	this.focusOnQoApp = async function() {
 		if (mac) {
-			await open(qoapp.path, {
+			await opn(qoapp.cmd[0], {
 				wait: false
 			});
-		} else if (win) {
+		} else {
 			robot.keyTap('tab', 'alt');
 		}
 		await delay(1000);
@@ -70,16 +71,16 @@ const Bot = function() {
 			case 'js':
 			case 'pug':
 				return [
-					'Atom',
-					'Brackets'
+					'atom',
+					'brackets'
 				];
 			case 'java':
 				return [
-					'Eclipse',
-					'Eclipse Java'
+					'eclipse',
+					'eclipse java'
 				];
 			case 'pde':
-				return ['Processing'];
+				return ['processing'];
 			default:
 				return [];
 		}
@@ -95,11 +96,11 @@ const Bot = function() {
 		// check if a compatible app is open
 		for (let comApp of compatibleApps) {
 			for (let openApp in apps.open) {
-				if (openApp.toUpperCase() === comApp.toUpperCase()) {
-					qoapp = {
-						name: comApp,
-						path: apps.open[openApp]
-					}
+				if (openApp.toLowerCase() === comApp) {
+					qoapp = {};
+					qoapp.name = comApp;
+					qoapp.cmd = apps.open[openApp];
+					this.qoapp = qoapp;
 					break;
 				}
 			}
@@ -108,33 +109,33 @@ const Bot = function() {
 		if (!qoapp) return;
 		// some apps will require more work to load projects in than simply
 		// opening the project folder, Eclipse is one of them
-		switch (qoapp.name) {
-			case 'Atom':
-			case 'Brackets':
-				await open(proj, {
+		switch (qoapp.name.toLowerCase()) {
+			case 'atom':
+			case 'brackets':
+				await opn(proj, {
 					app: qoapp.name,
 					wait: false
 				});
 				break;
-			case 'Eclipse':
-			case 'Eclipse Java':
+			case 'eclipse':
+			case 'eclipse Java':
 				await this.focusOnQoApp();
 				robot.keyTap('3', command);
 				await delay(1000);
 				await this.copy('import existing projects into');
-				this.paste();
+				await this.paste();
 				robot.keyTap('enter');
 				await delay(1000);
 				await this.copy(proj);
-				this.paste();
+				await this.paste();
 				robot.keyTap('enter');
 				await delay(1000);
 				robot.keyTap('tab');
 				robot.keyTap('enter');
 				break;
-			case 'Processing':
+			case 'processing':
 				log(proj + '/' + path.parse(proj).name + '.pde');
-				await open(proj + '/' + path.parse(proj).name + '.pde', {
+				await opn(proj + '/' + path.parse(proj).name + '.pde', {
 					app: qoapp.name,
 					wait: false
 				});
@@ -147,8 +148,8 @@ const Bot = function() {
 	}
 
 	this.focusOnFile = async function(file) {
-		switch (qoapp.name) {
-			case 'Atom':
+		switch (qoapp.name.toLowerCase()) {
+			case 'atom':
 				await this.focusOnQoApp();
 				robot.keyTap('p', command);
 				let fileRelPath = path.relative(__usrDir,
@@ -160,7 +161,7 @@ const Bot = function() {
 				robot.keyTap('enter');
 				break;
 			default:
-				await open(file, {
+				await opn(file, {
 					wait: false
 				});
 		}
@@ -169,8 +170,8 @@ const Bot = function() {
 
 	this.run = () => {
 		log('running program');
-		switch (qoapp.name) {
-			case 'Atom':
+		switch (qoapp.name.toLowerCase()) {
+			case 'atom':
 				break;
 			default:
 				robot.keyTap('r', command);

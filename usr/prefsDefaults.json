@@ -1,0 +1,19 @@
+{
+  "Atom": {
+    "default": ["js", "nodejs"],
+    "app": {}
+  },
+  "Brackets": {
+    "app": {}
+  },
+  "Code": {
+    "app": {}
+  },
+  "Eclipse": {
+    "default": ["java"],
+    "app": {}
+  },
+  "Processing": {
+    "app": {}
+  }
+}
