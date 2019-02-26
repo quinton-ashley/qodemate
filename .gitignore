@@ -5,3 +5,4 @@ dist
 build/*
 !build/icon.png
 *.log
+package-lock.json

@@ -4,32 +4,16 @@
  * copyright 2018
  */
 module.exports = async function(opt) {
-	const err = console.err;
-	const log = console.log;
-	global.__rootDir = opt.__rootDir;
+	// opt.v = false; // quieter log
+	opt.electron = true;
+	await require('./setup/setup.js')(opt);
 
-	const remote = require('electron').remote;
-	const {
-		app,
-		Menu
-	} = remote;
 	const bot = require('./bot.js');
-	const delay = require('delay');
-	const elec = require('./electronWrap.js');
-	const fs = require('fs-extra');
 	const parseIgnore = require('gitignore-globs');
 	const gitigTemplates = require('gitignore-templates');
 	const ignore = require('ignore');
-	const md = require('markdown-it')();
-	var Mousetrap = require('mousetrap');
-	const os = require('os');
-	const path = require('path');
-	const getOpenApps = require('get-open-apps');
-	const $ = require('jquery');
 
-	window.$ = window.jQuery = $;
-	window.Tether = require('tether');
-	window.Bootstrap = require('bootstrap');
+	const getOpenApps = require('get-open-apps');
 
 	global.__usrDir = os.homedir().replace(/\\/g, '/') + '/Documents/Qodemate';
 

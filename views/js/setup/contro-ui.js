@@ -145,9 +145,7 @@ const CUI = function() {
 		}
 	}
 
-	let customActions = () => {
-		log('set custom actions with the setCustomActions method');
-	};
+	let customActions = () => {};
 	let doAction = (act) => {
 		if (act == 'error-okay' || act == 'back') {
 			if (uiPrev) {
@@ -171,9 +169,7 @@ const CUI = function() {
 	};
 	this.doAction = doAction;
 
-	let customHeldActions = () => {
-		log('set custom actions with the setCustomHeldActions method');
-	};
+	let customHeldActions = () => {};
 	let doHeldAction = (act, timeHeld) => {
 		customHeldActions(act, this.btns.includes(act), timeHeld);
 	};
@@ -185,6 +181,10 @@ const CUI = function() {
 
 	this.setCustomActions = function(func) {
 		customActions = func;
+	};
+
+	this.setCustomHeldActions = function(func) {
+		customHeldActions = func;
 	};
 
 	this.setResize = function(func) {
@@ -326,9 +326,16 @@ const CUI = function() {
 		} else if ((/select/gi).test(state)) {
 			makeCursor(cuis[ui].$cur, state);
 		} else {
-			let $temp = $('#' + state).find('.row-y').eq(0).find('.uie').eq(0);
+			let $temp;
+			$temp = $(`#${state}.row-y`).eq(0).find('.uie').eq(0);
 			if (!$temp.length) {
-				$temp = $('#' + state).find('.row-x').eq(0).find('.uie').eq(0);
+				$temp = $(`#${state}.row-x`).eq(0).find('.uie').eq(0);
+			}
+			if (!$temp.length) {
+				$temp = $(`#${state} .row-y`).eq(0).find('.uie').eq(0);
+			}
+			if (!$temp.length) {
+				$temp = $(`#${state} .row-x`).eq(0).find('.uie').eq(0);
 			}
 			makeCursor($temp, state);
 		}
@@ -370,7 +377,7 @@ const CUI = function() {
 	this.uieClicked = uieClicked;
 
 	function uieHovered() {
-		if (!cuis[ui].hoverCurDisable) {
+		if (!cuis[ui].hoverCurDisabled && $(this).parents('#' + ui).length) {
 			makeCursor($(this));
 		}
 	}
@@ -459,6 +466,9 @@ const CUI = function() {
 			};
 		}
 		let lbl = btn.label.toLowerCase();
+		if (lbl == 'view') {
+			lbl = 'select';
+		}
 		log(ui);
 		switch (lbl) {
 			case 'up':
@@ -473,7 +483,7 @@ const CUI = function() {
 			case 'b':
 			case 'x':
 			case 'y':
-			case 'view':
+			case 'select':
 			case 'start':
 				await doAction(lbl);
 				break;
@@ -486,17 +496,19 @@ const CUI = function() {
 	}
 	this.buttonPressed = buttonPressed;
 
-	async function buttonHeld(btn) {
+	async function buttonHeld(btn, timeHeld) {
 		if (typeof btn == 'string') {
 			btn = {
 				label: btn
 			};
 		}
 		let lbl = btn.label.toLowerCase();
-		log(ui);
+		if (lbl == 'view') {
+			lbl = 'select';
+		}
 		switch (lbl) {
 			case 'a':
-				await doHeldAction($cur.attr('name') || 'a');
+				await doHeldAction($cur.attr('name') || 'a', timeHeld);
 				break;
 			case 'up':
 			case 'down':
@@ -505,9 +517,9 @@ const CUI = function() {
 			case 'b':
 			case 'x':
 			case 'y':
-			case 'view':
+			case 'select':
 			case 'start':
-				await doHeldAction(lbl);
+				await doHeldAction(lbl, timeHeld);
 				break;
 			default:
 				if (opt.v) {
@@ -544,7 +556,7 @@ const CUI = function() {
 				// if button is held, query is true and unchanged
 				if (btnStates[i] && query) {
 					btnStates[i] += 1;
-					await buttonHeld(i, btnStates[i]);
+					await buttonHeld(i, btnStates[i] * 16);
 					continue;
 				}
 				// save button state change
@@ -586,8 +598,8 @@ const CUI = function() {
 	}
 	this.start = function(options) {
 		opt = options || {};
-		$('.cui .uie').off('click').click(uieClicked);
-		$('.cui .uie').off('hover').hover(uieHovered);
+		$('.uie').off('click').click(uieClicked);
+		$('.uie').off('hover').hover(uieHovered);
 		loop();
 		$(window).resize(this.resize);
 	};
