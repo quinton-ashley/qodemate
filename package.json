@@ -80,6 +80,7 @@
     "csv-string": "^3.1.5",
     "delay": "^4.1.0",
     "electron-pug": "^2.0.0",
+    "electron-updater": "^4.0.6",
     "fs-extra": "^7.0.1",
     "get-open-apps": "^1.0.6",
     "gitignore-globs": "^0.1.1",
@@ -131,5 +132,5 @@
     "postversion": "git push",
     "V": "git remote | xargs -L1 git push --all && git push --tags && npm publish"
   },
-  "version": "0.1.22"
+  "version": "0.1.23"
 }

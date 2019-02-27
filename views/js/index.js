@@ -38,7 +38,7 @@ module.exports = async function(opt) {
 		v: true
 	});
 	require('process').on('uncaughtException', cui.err);
-	cui.uiStateChange('loading');
+	cui.change('loading');
 	let qm = require('./qodemate-core.js');
 
 	let usrFiles = [];
@@ -131,7 +131,7 @@ module.exports = async function(opt) {
 		if (bot) {
 			await bot.focusOnQodemate();
 		}
-		cui.uiStateChange('loaded');
+		cui.change('loaded');
 	}
 
 	async function performPart() {
