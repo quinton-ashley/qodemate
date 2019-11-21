@@ -3,10 +3,14 @@
  * authors: quinton-ashley
  * copyright 2018
  */
-module.exports = async function(opt) {
-	// opt.v = false; // quieter log
-	opt.electron = true;
-	await require('./setup/setup.js')(opt);
+module.exports = async function(arg) {
+	// arg.v = false; // quieter log
+	await require(arg.__rootDir + '/core/setup.js')(arg);
+	global.__usrDir = os.homedir().replace(/\\/g, '/') + '/Documents/Qodemate';
+	const {
+		systemPreferences,
+		Menu
+	} = electron;
 
 	const bot = require('./bot.js');
 	const parseIgnore = require('gitignore-globs');
@@ -15,29 +19,10 @@ module.exports = async function(opt) {
 
 	const getOpenApps = require('get-open-apps');
 
-	global.__usrDir = os.homedir().replace(/\\/g, '/') + '/Documents/Qodemate';
-
-	const klaw = function(dir, options) {
-		return new Promise((resolve, reject) => {
-			let items = [];
-			let i = 0;
-			require('klaw')(dir, options)
-				.on('data', item => {
-					if (i > 0) {
-						items.push(item.path);
-					}
-					i++;
-				})
-				.on('end', () => resolve(items))
-				.on('error', (err, item) => reject(err, item));
-		});
-	};
-
-	global.cui = require('./contro-ui.js');
 	cui.start({
 		v: true
 	});
-	require('process').on('uncaughtException', cui.err);
+	process.on('uncaughtException', cui.err);
 	cui.change('loading');
 	let qm = require('./qodemate-core.js');
 
@@ -47,7 +32,7 @@ module.exports = async function(opt) {
 
 	async function open() {
 		let project = {};
-		project.path = elec.selectDir('Choose Qodemate project');
+		project.path = dialog.selectDir('Choose Qodemate project');
 
 		let apps = {
 			open: await getOpenApps()
@@ -176,41 +161,21 @@ module.exports = async function(opt) {
 		log(slide);
 		if (slide != 'same') {
 			$('#presentation').empty();
-			$('#presentation').prepend(md.render(slide));
+			$('#presentation').prepend(md(slide));
 		}
 		let step = qm.nextStep();
 		await bot.focusOnFile(usrFiles[step.fileIndex]);
-		while (await performPart()) {
-			await delay(500);
-		}
+		while (await performPart()) {}
 		await bot.focusOnQodemate();
 	}
 
 	cui.setCustomActions(async function(act) {
-		if (act == 'quit') {
-			app.quit();
-		} else if (act == 'reset') {
+		if (act == 'reset') {
 			log('reset');
 			qm.restart();
 		} else if (act == 'play') {
 			await play();
 		}
-	});
-
-	Mousetrap.bind(['command+option+i', 'ctrl+shift+i'], function() {
-		remote.getCurrentWindow().toggleDevTools();
-		return false;
-	});
-	Mousetrap.bind(['command+w', 'ctrl+w', 'command+q', 'ctrl+q'], function() {
-		cui.doAction('quit');
-		return false;
-	});
-	Mousetrap.bind(['space'], function() {
-		cui.doAction('play');
-		return false;
-	});
-	Mousetrap.bind(['up', 'down', 'left', 'right'], function() {
-		return false;
 	});
 
 	cui.setUIOnChange((state, subState, gamepadConnected) => {
@@ -317,7 +282,7 @@ module.exports = async function(opt) {
 			submenu: [{
 				label: 'Learn More',
 				click() {
-					require('electron').shell.openExternal('https://electronjs.org')
+					electron.shell.openExternal('https://electronjs.org')
 				}
 			}]
 		}

@@ -4,26 +4,11 @@
  * copyright 2018
  */
 const Bot = function() {
-	const log = console.log;
-	const err = console.error;
-
-	const {
-		app
-	} = require('electron').remote;
-	const delay = require('delay');
 	const ncp = require('copy-paste');
-	const opn = require('opn');
-	const os = require('os');
 	const {
 		promisify
 	} = require('util');
-	const path = require('path');
-	const spawn = require('await-spawn');
 	const awaitCopy = promisify(ncp.copy);
-	const osType = os.type();
-	const linux = (osType == 'Linux');
-	const mac = (osType == 'Darwin');
-	const win = (osType == 'Windows_NT');
 	let command;
 	if (mac) {
 		command = 'command';
@@ -41,11 +26,11 @@ const Bot = function() {
 		qodemate.path = qodemate.path.replace(/\/Contents\/MacOS\/(Electron|qodemate)/gi, '');
 	}
 	log(qodemate);
-	let qoapp;
+	let ide;
 
 	this.focusOnQodemate = async function() {
 		if (mac) {
-			await opn(qoapp.cmd[0], {
+			await opn(qodemate.path, {
 				wait: false
 			});
 		} else {
@@ -53,15 +38,15 @@ const Bot = function() {
 		}
 	}
 
-	this.focusOnQoApp = async function() {
+	this.focusOnIDE = async function() {
 		if (mac) {
-			await opn(qoapp.cmd[0], {
+			await opn(ide.path, {
 				wait: false
 			});
 		} else {
 			robot.keyTap('tab', 'alt');
 		}
-		await delay(1000);
+		await delay(500);
 	}
 
 	function getCompatibleApps(lang) {
@@ -94,32 +79,35 @@ const Bot = function() {
 		let compatibleApps = getCompatibleApps(lang);
 
 		// check if a compatible app is open
-		for (let comApp of compatibleApps) {
+		for (let compApp of compatibleApps) {
 			for (let openApp in apps.open) {
-				if (openApp.toLowerCase() === comApp) {
-					qoapp = {};
-					qoapp.name = comApp;
-					qoapp.cmd = apps.open[openApp];
-					this.qoapp = qoapp;
+				if (openApp.toLowerCase() === compApp) {
+					ide = {};
+					ide.name = compApp;
+					ide.path = apps.open[openApp][0];
+					if (mac) {
+						ide.path = ide.path.replace(/\.app.*/, '.app');
+					}
+					this.ide = ide;
 					break;
 				}
 			}
-			if (qoapp) break;
+			if (ide) break;
 		}
-		if (!qoapp) return;
+		if (!ide) return;
 		// some apps will require more work to load projects in than simply
 		// opening the project folder, Eclipse is one of them
-		switch (qoapp.name.toLowerCase()) {
+		switch (ide.name.toLowerCase()) {
 			case 'atom':
 			case 'brackets':
 				await opn(proj, {
-					app: qoapp.name,
+					app: ide.name,
 					wait: false
 				});
 				break;
 			case 'eclipse':
 			case 'eclipse Java':
-				await this.focusOnQoApp();
+				await this.focusOnIDE();
 				robot.keyTap('3', command);
 				await delay(1000);
 				await this.copy('import existing projects into');
@@ -136,7 +124,7 @@ const Bot = function() {
 			case 'processing':
 				log(proj + '/' + path.parse(proj).name + '.pde');
 				await opn(proj + '/' + path.parse(proj).name + '.pde', {
-					app: qoapp.name,
+					app: ide.name,
 					wait: false
 				});
 				break;
@@ -144,13 +132,13 @@ const Bot = function() {
 				err('no supported IDE found');
 				return;
 		}
-		return qoapp;
+		return ide;
 	}
 
 	this.focusOnFile = async function(file) {
-		switch (qoapp.name.toLowerCase()) {
+		switch (ide.name.toLowerCase()) {
 			case 'atom':
-				await this.focusOnQoApp();
+				await this.focusOnIDE();
 				robot.keyTap('p', command);
 				let fileRelPath = path.relative(__usrDir,
 					file).replace(/\\/g, '/');
@@ -165,12 +153,12 @@ const Bot = function() {
 					wait: false
 				});
 		}
-		await delay(1000);
+		await delay(500);
 	}
 
 	this.run = () => {
 		log('running program');
-		switch (qoapp.name.toLowerCase()) {
+		switch (ide.name.toLowerCase()) {
 			case 'atom':
 				break;
 			default:
@@ -247,7 +235,7 @@ const Bot = function() {
 
 	this.paste = async function() {
 		robot.keyTap('v', command);
-		await delay(500);
+		// await delay(50);
 	};
 }
 
