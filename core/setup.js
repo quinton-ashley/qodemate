@@ -87,8 +87,6 @@ module.exports = async function(arg) {
 		try {
 			files = await electron.dialog.showOpenDialog(opt);
 			files = files.filePaths;
-			log('blue');
-			log(files);
 		} catch (ror) {
 			er(ror);
 		}
