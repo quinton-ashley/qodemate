@@ -12,7 +12,7 @@ module.exports = async function(arg) {
 		Menu
 	} = electron;
 
-	const bot = require('./bot.js');
+	const bot = require(__rootDir + '/core/bot.js');
 	const parseIgnore = require('gitignore-globs');
 	const gitigTemplates = require('gitignore-templates');
 	const ignore = require('ignore');
@@ -24,7 +24,7 @@ module.exports = async function(arg) {
 	});
 	process.on('uncaughtException', cui.err);
 	cui.change('loading');
-	let qm = require('./qodemate-core.js');
+	let qm = require(__rootDir + '/core/qodemate-core.js');
 
 	let usrFiles = [];
 	let proj = {};
@@ -169,21 +169,21 @@ module.exports = async function(arg) {
 		await bot.focusOnQodemate();
 	}
 
-	cui.setCustomActions(async function(act) {
+	cui.onAction = async function(act) {
 		if (act == 'reset') {
 			log('reset');
 			qm.restart();
 		} else if (act == 'play') {
 			await play();
 		}
-	});
+	}
 
-	cui.setUIOnChange((state, subState, gamepadConnected) => {
+	cui.onChange = async function(state, subState, gamepadConnected) {
 		if (state == 'loaded') {
 			$('#open').hide();
 			$('#play').show();
 		}
-	});
+	}
 
 	async function bigButtonClicked() {
 		if (cui.ui == 'loaded') {

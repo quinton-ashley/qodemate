@@ -3,14 +3,19 @@
  * authors: quinton-ashley
  * copyright 2018
  */
-
-const log = console.log;
+if (!log) {
+	const log = console.log;
+}
 const tagRegex = /([^ \w][^\);]+[\);]|[a-zA-Z][^ a-zA-Z]*|[\d\.]+)/g;
 
 let qode, seq, set, setIdx, setIdxs, cur, past, steps, stepItr;
 let lessons, slideItr, check, allFilesAdded, fIdx;
 
 class Qodemate {
+	constructor() {
+		this.reset();
+	}
+
 	reset() {
 		qode = [];
 		// the sequence array stores step parts in the order they occur in
@@ -33,10 +38,6 @@ class Qodemate {
 		check = false;
 		allFilesAdded = false;
 		fIdx = -1;
-	}
-
-	constructor() {
-		this.reset();
 	}
 
 	restart() {

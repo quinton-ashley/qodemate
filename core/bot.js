@@ -3,32 +3,35 @@
  * authors: quinton-ashley
  * copyright 2018
  */
-const Bot = function() {
-	const ncp = require('copy-paste');
-	const {
-		promisify
-	} = require('util');
-	const awaitCopy = promisify(ncp.copy);
-	let command;
-	if (mac) {
-		command = 'command';
-	} else if (win || linux) {
-		command = 'control';
-	}
-	const robot = require('robotjs');
-	robot.setKeyboardDelay(0);
 
-	let qodemate = {
-		name: 'Qodemate',
-		path: app.getPath('exe')
-	};
-	if (mac) {
-		qodemate.path = qodemate.path.replace(/\/Contents\/MacOS\/(Electron|qodemate)/gi, '');
-	}
-	log(qodemate);
-	let ide;
+const ncp = require('copy-paste');
+const {
+	promisify
+} = require('util');
+const awaitCopy = promisify(ncp.copy);
+let command;
+if (mac) {
+	command = 'command';
+} else if (win || linux) {
+	command = 'control';
+}
+const robot = require('robotjs');
+robot.setKeyboardDelay(0);
 
-	this.focusOnQodemate = async function() {
+let qodemate = {
+	name: 'Qodemate',
+	path: app.getPath('exe')
+};
+if (mac) {
+	qodemate.path = qodemate.path.replace(/\/Contents\/MacOS\/(Electron|qodemate)/gi, '');
+}
+log(qodemate);
+let ide;
+
+class Bot {
+	constructor() {}
+
+	async focusOnQodemate() {
 		if (mac) {
 			await opn(qodemate.path, {
 				wait: false
@@ -38,7 +41,7 @@ const Bot = function() {
 		}
 	}
 
-	this.focusOnIDE = async function() {
+	async focusOnIDE() {
 		if (mac) {
 			await opn(ide.path, {
 				wait: false
@@ -49,7 +52,7 @@ const Bot = function() {
 		await delay(500);
 	}
 
-	function getCompatibleApps(lang) {
+	getCompatibleApps(lang) {
 		switch (lang) {
 			case 'css':
 			case 'html':
@@ -74,7 +77,7 @@ const Bot = function() {
 	// proj is the path to the project
 	// lang is the programming language
 	// apps contains the available apps
-	this.openProject = async function(proj, lang, apps) {
+	async openProject(proj, lang, apps) {
 		// find compatible apps for the language of the user's proj
 		let compatibleApps = getCompatibleApps(lang);
 
@@ -135,7 +138,7 @@ const Bot = function() {
 		return ide;
 	}
 
-	this.focusOnFile = async function(file) {
+	async focusOnFile(file) {
 		switch (ide.name.toLowerCase()) {
 			case 'atom':
 				await this.focusOnIDE();
@@ -156,7 +159,7 @@ const Bot = function() {
 		await delay(500);
 	}
 
-	this.run = () => {
+	run() {
 		log('running program');
 		switch (ide.name.toLowerCase()) {
 			case 'atom':
@@ -166,13 +169,13 @@ const Bot = function() {
 		}
 	}
 
-	this.clear = function() {
+	clear() {
 		log('clear file contents');
 		robot.keyTap('a', command);
 		robot.keyTap('backspace');
 	}
 
-	this.moveToStart = () => {
+	moveToStart() {
 		log('moved to Start');
 		if (mac) {
 			robot.keyTap('up', command);
@@ -181,7 +184,7 @@ const Bot = function() {
 		}
 	}
 
-	this.moveToEnd = () => {
+	moveToEnd() {
 		log('moved to End');
 		if (mac) {
 			robot.keyTap('down', command);
@@ -190,7 +193,7 @@ const Bot = function() {
 		}
 	}
 
-	this.moveToBOL = () => {
+	moveToBOL() {
 		log('moved to BOL');
 		if (mac) {
 			robot.keyTap('left', command);
@@ -199,7 +202,7 @@ const Bot = function() {
 		}
 	}
 
-	this.moveToEOL = () => {
+	moveToEOL() {
 		log('moved to EOL');
 		if (mac) {
 			robot.keyTap('right', command);
@@ -208,7 +211,7 @@ const Bot = function() {
 		}
 	}
 
-	this.move = (lines, direction, mod) => {
+	move(lines, direction, mod) {
 		log('moved ' + lines + ' ' + direction);
 		for (var i = 0; i < lines; i++) {
 			if (mod) {
@@ -219,7 +222,7 @@ const Bot = function() {
 		}
 	}
 
-	this.deleteLines = (lines) => {
+	deleteLines(lines) {
 		this.move(1, 'down');
 		this.moveToBOL();
 		this.move(lines, 'up', 'shift');
@@ -229,11 +232,11 @@ const Bot = function() {
 		log('deleted');
 	}
 
-	this.copy = async function(text) {
+	async copy(text) {
 		await awaitCopy(text);
 	};
 
-	this.paste = async function() {
+	async paste() {
 		robot.keyTap('v', command);
 		// await delay(50);
 	};
