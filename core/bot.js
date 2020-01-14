@@ -3,7 +3,6 @@
  * authors: quinton-ashley
  * copyright 2018
  */
-
 const ncp = require('copy-paste');
 const {
 	promisify
@@ -56,6 +55,7 @@ class Bot {
 		switch (lang) {
 			case 'css':
 			case 'html':
+			case 'md':
 			case 'js':
 			case 'pug':
 				return [
@@ -78,26 +78,37 @@ class Bot {
 	// lang is the programming language
 	// apps contains the available apps
 	async openProject(proj, lang, apps) {
-		// find compatible apps for the language of the user's proj
-		let compatibleApps = getCompatibleApps(lang);
-
-		// check if a compatible app is open
-		for (let compApp of compatibleApps) {
-			for (let openApp in apps.open) {
-				if (openApp.toLowerCase() === compApp) {
-					ide = {};
-					ide.name = compApp;
-					ide.path = apps.open[openApp][0];
-					if (mac) {
-						ide.path = ide.path.replace(/\.app.*/, '.app');
+		if (!win) {
+			// find compatible apps for the language of the user's proj
+			let compatibleApps = this.getCompatibleApps(lang);
+			// check if a compatible app is open
+			for (let compApp of compatibleApps) {
+				for (let openApp in apps.open) {
+					if (openApp.toLowerCase() === compApp) {
+						ide = {};
+						ide.name = compApp;
+						ide.path = apps.open[openApp][0];
+						if (mac) {
+							ide.path = ide.path.replace(/\.app.*/, '.app');
+						}
+						this.ide = ide;
+						break;
 					}
-					this.ide = ide;
-					break;
 				}
+				if (ide) break;
 			}
-			if (ide) break;
+			if (!ide) return;
+		} else if (!arg.dev) {
+			ide = {};
+			ide.path = await dialog.selectFile('Choose your IDE');
+			ide.name = path.parse(ide.path).name;
+			log(ide);
+		} else {
+			ide = {
+				path: "C:/Users/quint/AppData/Local/atom/atom.exe",
+				name: "atom"
+			};
 		}
-		if (!ide) return;
 		// some apps will require more work to load projects in than simply
 		// opening the project folder, Eclipse is one of them
 		switch (ide.name.toLowerCase()) {

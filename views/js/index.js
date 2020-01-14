@@ -11,6 +11,7 @@ module.exports = async function(arg) {
 		systemPreferences,
 		Menu
 	} = electron;
+	global.err = console.error;
 
 	const bot = require(__rootDir + '/core/bot.js');
 	const parseIgnore = require('gitignore-globs');
@@ -32,7 +33,7 @@ module.exports = async function(arg) {
 
 	async function open() {
 		let project = {};
-		project.path = dialog.selectDir('Choose Qodemate project');
+		project.path = await dialog.selectDir('Choose Qodemate project');
 
 		let apps = {
 			open: await getOpenApps()
