@@ -178,6 +178,9 @@ module.exports = async function(arg) {
 			qm.restart();
 		} else if (act == 'play') {
 			await play();
+		} else if (act == 'quit') {
+			app.quit();
+			return;
 		}
 	}
 

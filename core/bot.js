@@ -14,8 +14,8 @@ if (mac) {
 } else if (win || linux) {
 	command = 'control';
 }
-const robot = require('robotjs');
-robot.setKeyboardDelay(0);
+const kb = require('robotjs');
+kb.setKeyboardDelay(0);
 
 let qodemate = {
 	name: 'Qodemate',
@@ -36,7 +36,7 @@ class Bot {
 				wait: false
 			});
 		} else {
-			robot.keyTap('tab', 'alt');
+			kb.keyTap('tab', 'alt');
 		}
 	}
 
@@ -46,7 +46,7 @@ class Bot {
 				wait: false
 			});
 		} else {
-			robot.keyTap('tab', 'alt');
+			kb.keyTap('tab', 'alt');
 		}
 		await delay(500);
 	}
@@ -122,18 +122,18 @@ class Bot {
 			case 'eclipse':
 			case 'eclipse Java':
 				await this.focusOnIDE();
-				robot.keyTap('3', command);
+				kb.keyTap('3', command);
 				await delay(1000);
 				await this.copy('import existing projects into');
 				await this.paste();
-				robot.keyTap('enter');
+				kb.keyTap('enter');
 				await delay(1000);
 				await this.copy(proj);
 				await this.paste();
-				robot.keyTap('enter');
+				kb.keyTap('enter');
 				await delay(1000);
-				robot.keyTap('tab');
-				robot.keyTap('enter');
+				kb.keyTap('tab');
+				kb.keyTap('enter');
 				break;
 			case 'processing':
 				log(proj + '/' + path.parse(proj).name + '.pde');
@@ -153,14 +153,14 @@ class Bot {
 		switch (ide.name.toLowerCase()) {
 			case 'atom':
 				await this.focusOnIDE();
-				robot.keyTap('p', command);
-				let fileRelPath = path.relative(__usrDir,
+				kb.keyTap('p', command);
+				let fileRelPath = path.relative(usrDir,
 					file).replace(/\\/g, '/');
 				fileRelPath = fileRelPath.replace(/^[^\/]*\//, '');
 				log(fileRelPath);
 				await this.copy(fileRelPath);
 				await this.paste();
-				robot.keyTap('enter');
+				kb.keyTap('enter');
 				break;
 			default:
 				await opn(file, {
@@ -176,49 +176,49 @@ class Bot {
 			case 'atom':
 				break;
 			default:
-				robot.keyTap('r', command);
+				kb.keyTap('r', command);
 		}
 	}
 
 	clear() {
 		log('clear file contents');
-		robot.keyTap('a', command);
-		robot.keyTap('backspace');
+		kb.keyTap('a', command);
+		kb.keyTap('backspace');
 	}
 
 	moveToStart() {
 		log('moved to Start');
 		if (mac) {
-			robot.keyTap('up', command);
+			kb.keyTap('up', command);
 		} else if (win) {
-			robot.keyTap('home', command);
+			kb.keyTap('home', command);
 		}
 	}
 
 	moveToEnd() {
 		log('moved to End');
 		if (mac) {
-			robot.keyTap('down', command);
+			kb.keyTap('down', command);
 		} else if (win) {
-			robot.keyTap('end', command);
+			kb.keyTap('end', command);
 		}
 	}
 
 	moveToBOL() {
 		log('moved to BOL');
 		if (mac) {
-			robot.keyTap('left', command);
+			kb.keyTap('left', command);
 		} else if (win) {
-			robot.keyTap('home');
+			kb.keyTap('home');
 		}
 	}
 
 	moveToEOL() {
 		log('moved to EOL');
 		if (mac) {
-			robot.keyTap('right', command);
+			kb.keyTap('right', command);
 		} else if (win) {
-			robot.keyTap('end');
+			kb.keyTap('end');
 		}
 	}
 
@@ -226,9 +226,9 @@ class Bot {
 		log('moved ' + lines + ' ' + direction);
 		for (var i = 0; i < lines; i++) {
 			if (mod) {
-				robot.keyTap(direction, mod);
+				kb.keyTap(direction, mod);
 			} else {
-				robot.keyTap(direction);
+				kb.keyTap(direction);
 			}
 		}
 	}
@@ -237,8 +237,8 @@ class Bot {
 		this.move(1, 'down');
 		this.moveToBOL();
 		this.move(lines, 'up', 'shift');
-		robot.keyTap('backspace');
-		robot.keyTap('up');
+		kb.keyTap('backspace');
+		kb.keyTap('up');
 		this.moveToEOL();
 		log('deleted');
 	}
@@ -248,7 +248,7 @@ class Bot {
 	};
 
 	async paste() {
-		robot.keyTap('v', command);
+		kb.keyTap('v', command);
 		// await delay(50);
 	};
 }

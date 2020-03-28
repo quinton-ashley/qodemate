@@ -63,14 +63,8 @@
 				webviewTag: true
 			}
 		};
-		if (arg.cli) {
-			windowPrms.width = 3840 / 4;
-			windowPrms.height = 2160 / 2;
-		} else {
-			windowPrms.width = 3840 / 2;
-			windowPrms.height = 2160 / 2;
-			windowPrms.frame = false;
-		}
+		windowPrms.width = 3840 / 4;
+		windowPrms.height = 2160 / 2;
 
 		mainWindow = new BrowserWindow(windowPrms);
 
