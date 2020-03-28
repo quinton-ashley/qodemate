@@ -1,23 +1,25 @@
 /*
- * index.js handles responses to user interactions with the menu and app UI
- * authors: quinton-ashley
- * copyright 2018
+ * index.js : Qodemate : quinton-ashley
+ *
+ * handles responses to user interactions with the menu and app UI
  */
 module.exports = async function(arg) {
 	// arg.v = false; // quieter log
-	await require(arg.__rootDir + '/core/setup.js')(arg);
-	global.__usrDir = os.homedir().replace(/\\/g, '/') + '/Documents/Qodemate';
+	await require(arg.__root + '/core/setup.js')(arg);
+	log('version: ' + pkg.version);
+	global.util = require(__root + '/core/util.js');
+	global.usrDir = util.absPath('$home/Documents/Qodemate');
 	const {
 		systemPreferences,
 		Menu
 	} = electron;
 	global.err = console.error;
 
-	const bot = require(__rootDir + '/core/bot.js');
 	const parseIgnore = require('gitignore-globs');
 	const gitigTemplates = require('gitignore-templates');
 	const ignore = require('ignore');
 
+	const bot = require(__root + '/core/bot.js');
 	const getOpenApps = require('get-open-apps');
 
 	cui.start({
@@ -25,7 +27,7 @@ module.exports = async function(arg) {
 	});
 	process.on('uncaughtException', cui.err);
 	cui.change('loading');
-	let qm = require(__rootDir + '/core/qodemate-core.js');
+	let qm = require(__root + '/core/qodemate-core.js');
 
 	let usrFiles = [];
 	let proj = {};
@@ -69,7 +71,7 @@ module.exports = async function(arg) {
 		files = ig.filter(files);
 		log(files);
 
-		proj.path = __usrDir + '/' + path.parse(project.path).name;
+		proj.path = usrDir + '/' + path.parse(project.path).name;
 		log(proj.path);
 		await fs.copy(project.path, proj.path);
 
@@ -90,7 +92,7 @@ module.exports = async function(arg) {
 		//		else {
 		//			files = project;
 		//			let pDir = path.dirname(project.path);
-		//			usrDir = __usrDir + pDir.slice(pDir.lastIndexOf('/'), -1);
+		//			usrDir = usrDir + pDir.slice(pDir.lastIndexOf('/'), -1);
 		//			fs.copySync(pDir, usrDir);
 		//			open(usrDir, {
 		//				app: 'brackets'

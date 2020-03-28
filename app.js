@@ -1,19 +1,36 @@
 #!/usr/bin/env node
 
+/*
+ * app.js : Qodemate : quinton-ashley
+ *
+ * Parses command line args. Starts the app.
+ */
 (async function() {
 	const log = console.log;
-	let arg = require('minimist')(process.argv.slice(2));
-	arg.__rootDir = __dirname.replace(/\\/g, '/');
-	if (arg.i || arg.h) {
-		return;
-	} else {
-		arg.electron = true;
-	}
+	let arg = require('minimist')(process.argv);
+	arg.__root = __dirname.replace(/\\/g, '/');
+	arg.node_modules = arg.__root + '/node_modules';
 
 	const {
 		app,
 		BrowserWindow
 	} = require('electron');
+
+	// command line options
+	if (arg.h || arg.help) {
+		log('-h|--help : print command line options');
+		log('-v|--version : get the version of the app');
+	} else if (arg.v || arg.version) {
+		log('v' + require(arg.__root + '/package.json').version);
+	} else {
+		arg.electron = true;
+	}
+
+	if (!arg.electron) {
+		app.quit();
+		return;
+	}
+
 	const fs = require('fs');
 	const path = require('path');
 	const url = require('url');
@@ -26,8 +43,8 @@
 	async function createWindow() {
 		try {
 			const locals = {
-				arg: JSON.stringify(arg),
-				node_modules: path.join(arg.__rootDir, 'node_modules').replace(/\\/g, '/')
+				arg: JSON.stringify(arg).replace(/\\/g, '/').replace(/\/\//g, '/'),
+				node_modules: arg.node_modules
 			};
 			log(locals);
 			let pug = await setupPug({
@@ -40,18 +57,35 @@
 			log(err);
 		}
 
-		mainWindow = new BrowserWindow({
-			width: 720,
-			height: 1080,
+		let windowPrms = {
 			webPreferences: {
-				nodeIntegration: true
+				nodeIntegration: true,
+				webviewTag: true
 			}
-		});
+		};
+		if (arg.cli) {
+			windowPrms.width = 3840 / 4;
+			windowPrms.height = 2160 / 2;
+		} else {
+			windowPrms.width = 3840 / 2;
+			windowPrms.height = 2160 / 2;
+			windowPrms.frame = false;
+		}
 
-		mainWindow.loadURL(`file://${__dirname}/views/pug/index.pug`);
+		mainWindow = new BrowserWindow(windowPrms);
+
+		let url = 'file://' + arg.__root;
+		if (!arg.cli) {
+			url += '/views/pug/index.pug';
+		} else if (!arg.cli.includes('.')) {
+			url += `/${arg.cli}/cli/${arg.cli}-cli.pug`;
+		} else {
+			url += arg.cli.slice(1);
+		}
+		mainWindow.loadURL(url);
 
 		// Open the DevTools.
-		if (arg.dev) {
+		if (arg.dev || arg.cli) {
 			mainWindow.webContents.openDevTools();
 		}
 

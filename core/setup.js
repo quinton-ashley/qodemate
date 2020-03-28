@@ -1,10 +1,15 @@
+/*
+ * setup.js : quinton-ashley
+ *
+ * Quinton's basecode setup file for electron apps.
+ */
 module.exports = async function(arg) {
 	global.arg = arg;
 	global.log = console.log;
 	global.er = console.error;
-	global.__rootDir = arg.__rootDir;
+	global.__root = arg.__root;
 	global.node_modules = arg.node_modules;
-	global.pkg = require(__rootDir + '/package.json');
+	global.pkg = require(__root + '/package.json');
 
 	global.delay = require('delay');
 	global.fs = require('fs-extra');
@@ -60,7 +65,6 @@ module.exports = async function(arg) {
 
 	dialog.select = async function(opt) {
 		opt = opt || {};
-		let files = [];
 		if (opt.types || opt.type) {
 			let types = opt.types || opt.type;
 			let properties = [];
@@ -84,12 +88,9 @@ module.exports = async function(arg) {
 		}
 		opt.title = opt.msg;
 		opt.message = opt.msg;
-		try {
-			files = await electron.dialog.showOpenDialog(opt);
-			files = files.filePaths;
-		} catch (ror) {
-			er(ror);
-		}
+		let files = await electron.dialog.showOpenDialog(opt);
+		if (files.canceled) return;
+		files = files.filePaths;
 		if (win) {
 			for (let i in files) {
 				files[i] = files[i].replace(/\\/g, '/');
@@ -143,7 +144,7 @@ module.exports = async function(arg) {
 
 	let toggleDev;
 	if (mac) toggleDev = ['command+option+i', 'command+shift+i'];
-	if (win) toggleDev = ['ctrl+alt+i', 'ctrl+shift+i'];
+	if (win || linux) toggleDev = ['ctrl+alt+i', 'ctrl+shift+i'];
 
 	Mousetrap.bind(toggleDev, function() {
 		electron.getCurrentWindow().toggleDevTools();
@@ -164,5 +165,9 @@ module.exports = async function(arg) {
 	for (let direction of directions) {
 		cui.bind(direction, direction);
 	}
-	cui.bind(['command+w', 'ctrl+w', 'command+q', 'ctrl+q'], 'quit');
+	let toggleQuit;
+	if (mac) toggleQuit = ['command+w', 'command+q'];
+	if (win || linux) toggleQuit = ['ctrl+w', 'ctrl+q'];
+	cui.bind(toggleQuit, 'quit');
+	cui.bind('enter', 'enter');
 };
