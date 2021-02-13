@@ -1,5 +1,7 @@
 # Qodemate
 
+This repository has been archived because I could never get typing commands to work consistently with some IDEs. My solution was to pivot to just making a website where you could make interactive code presentation "videos" but someone has already done that! Check out <https://ractive-player.org/> really cool stuff!
+
 Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!
 
 ## Goals and Ethos
