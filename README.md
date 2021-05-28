@@ -1,17 +1,17 @@
 # Qodemate
 
-This repository has been archived because I could never get typing commands to work consistently with some IDEs. My solution was to pivot to just making a website where you could make interactive code presentation "videos" but someone has already done that! Check out <https://ractive-player.org/> really cool stuff!
+_I stopped working on this project in 2020 because I could never get copy/paste commands to work consistently with some IDEs and typing would trigger autocompletion which was a big problem too. I wanted to pivot to making a website where users could make interactive code presentation "videos" but someone has kind of already done that. Check out <https://ractive-player.org/> really cool stuff!_
 
-Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!
+_Recently I've considered making Qodemate extensions for code editor apps, VS Code would be the first, and then having the Qodemate app communicate with the Qodemate extension to do the "typing" in the code editor app._
 
-## Goals and Ethos
+I want Qodemate to be a dynamic CS presentation/textbook platform. In the future maybe it could even be a coding assistant you could talk to, hence the name.
 
-- Made for CS Educators, so that with minimal prep work they can give fancy, multi-file, non-sequential, step reproduction presentations (like CodeAcademy).
-- The ethos of Qodemate is to make the process of coding transparent so CS educators can teach computer science, not just programming.
-- Works with the fully featured development apps (like Eclipse, Adobe Brackets, Xcode, etc.) and doesn't use a sandboxed webpage (CodeAcademy, Hour of Code, Code Studio). Some sandboxed tutorial sites oversimplify things. They often have a lot of code running behind the scenes that users can't access. This results in students not knowing how to start their own projects outside of the site's sandboxed environment.
-- In addition to code reproduction, during a Qodemate presentation you can pull up docs, install packages, run commands, and even do a search on StackOverflow.
-- Projects are stored locally so everyone can see all the files and modules.
-- Students that use Qodemate get real world programming experience: how to get from a blank document of nothing to something or use packages to build a project greater than the sum of its parts. Qodemate was designed so that teachers can purposefully show all the trial and error along the way.
+## Goals
+
+- with minimal prep work CS educators should be able to give fancy, multi-file, non-sequential, step sequenced reproduction presentations (like CodeAcademy)
+- should make the process of coding transparent so CS educators can teach computer science, not just programming
+- should work with fully featured development apps (like Eclipse, Adobe Brackets, Xcode, etc.) without using a sandboxed webpage (CodeAcademy, Hour of Code, Code Studio). Some sandboxed tutorial sites oversimplify things. They often have a lot of code running behind the scenes that users can't access. This results in students not knowing how to start their own projects outside of the site's sandboxed environment.
+- should be able to pull up docs, install packages, run commands, and even do a search on StackOverflow
 
 ## Why should I use Qodemate?
 
@@ -24,18 +24,17 @@ Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!
 ### Live Coding Presentations
 
 - must be done from memory or improvised
-- teaching a class at the same time can be difficult
-- forces you to sit/stand behind a computer during class
+- teaching a class and typing at the same time can be difficult
 
 ### Dynamic Qodemate Presentations
 
-- prep every moment of a dynamic presentation
+- fully choreograph a dynamic presentation (improv is optional)
+- hit the spacebar or use a clicker like you would with a powerpoint
 - run code at any point during the presentation
-- no typing necessary, hit the spacebar or use a clicker like you would with a powerpoint
 
 ### Summary
 
-Don't just teach your students programming, teach them the process of programming! By using Qodemate you get all the benefits of static slide based presentations and live coding presentations and none of the disadvantages! Still not convinced? Take a look at the simple_sample.js and lesson.md files bellow and see how easy it is to section your code and write slides in markdown!
+Don't just teach your students programming, teach them the process of programming! By using Qodemate you get all the benefits of static slide based presentations and live coding presentations and none of the disadvantages! Still not convinced? Take a look at the simple_sample.js and lesson.md files bellow and see how easy it is to section out your code and write slides in markdown!
 
 ## Simple Sample Project
 
@@ -100,11 +99,4 @@ Download these test files. Right now only the jsTestFolder will work.
 
 ### Video/Audio File Syncing
 
-Steps can also be synced to video tutorials on Youtube, vimeo, etc outside a classroom setting to create interactive tutorial experiences outside the classroom.
-
-### Please consider donating!
-
-If you want to support this project and you appreciate my work so far please donate! Any amount is accepted. Thank you :)
-
-Patreon: <https://www.patreon.com/qashto>  
-Paypal: <https://www.paypal.me/qashto/5>
+Steps synced to video tutorials on Youtube, vimeo, etc outside a classroom setting to create interactive tutorial experiences outside the classroom.

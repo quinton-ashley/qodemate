@@ -10,18 +10,23 @@
 	let arg = require('minimist')(process.argv);
 	arg.__root = __dirname.replace(/\\/g, '/');
 	arg.node_modules = arg.__root + '/node_modules';
+	let version = require(arg.__root + '/package.json').version;
 
 	const {
 		app,
 		BrowserWindow
 	} = require('electron');
+	app.allowRendererProcessReuse = false;
 
 	// command line options
 	if (arg.h || arg.help) {
 		log('-h|--help : print command line options');
 		log('-v|--version : get the version of the app');
+		if (arg.dev) {
+			log('--cli : run "scrape" or "db"');
+		}
 	} else if (arg.v || arg.version) {
-		log('v' + require(arg.__root + '/package.json').version);
+		log('v' + version);
 	} else {
 		arg.electron = true;
 	}
@@ -44,6 +49,7 @@
 		try {
 			const locals = {
 				arg: JSON.stringify(arg).replace(/\\/g, '/').replace(/\/\//g, '/'),
+				version: version,
 				node_modules: arg.node_modules
 			};
 			log(locals);
@@ -59,18 +65,25 @@
 
 		let windowPrms = {
 			webPreferences: {
+				enableRemoteModule: true,
 				nodeIntegration: true,
 				webviewTag: true
 			}
 		};
-		windowPrms.width = 3840 / 4;
-		windowPrms.height = 2160 / 2;
+		if (arg.cli) {
+			windowPrms.width = 3840 / 4;
+			windowPrms.height = 2160 / 2;
+		} else {
+			windowPrms.width = 3840 / 2;
+			windowPrms.height = 2160 / 2;
+			windowPrms.frame = false;
+		}
 
 		mainWindow = new BrowserWindow(windowPrms);
 
 		let url = 'file://' + arg.__root;
 		if (!arg.cli) {
-			url += '/views/pug/index.pug';
+			url += '/views/index.pug';
 		} else if (!arg.cli.includes('.')) {
 			url += `/${arg.cli}/cli/${arg.cli}-cli.pug`;
 		} else {
