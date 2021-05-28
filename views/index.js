@@ -3,7 +3,7 @@
  *
  * handles responses to user interactions with the menu and app UI
  */
-module.exports = async function(arg) {
+module.exports = async function (arg) {
 	// arg.v = false; // quieter log
 	await require(arg.__root + '/core/setup.js')(arg);
 	log('version: ' + pkg.version);
@@ -172,19 +172,19 @@ module.exports = async function(arg) {
 		await bot.focusOnQodemate();
 	}
 
-	cui.onAction = async function(act) {
+	cui.onAction = async function (act) {
 		if (act == 'reset') {
 			log('reset');
 			qm.restart();
 		} else if (act == 'play') {
 			await play();
 		} else if (act == 'quit') {
-			app.quit();
+			electron.app.quit();
 			return;
 		}
 	}
 
-	cui.onChange = async function(state, subState, gamepadConnected) {
+	cui.onChange = async function (state, subState, gamepadConnected) {
 		if (state == 'loaded') {
 			$('#open').hide();
 			$('#play').show();

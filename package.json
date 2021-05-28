@@ -67,6 +67,7 @@
     }
   ],
   "dependencies": {
+    "@popperjs/core": "^2.9.2",
     "await-spawn": "*",
     "bootstrap": "*",
     "contro-ui": "*",
@@ -95,7 +96,7 @@
     "robotjs": "^0.6.0",
     "tether": "*"
   },
-  "description": "Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!",
+  "description": "Qodemate is a presentation platform for CS educators",
   "entry point": "app.js",
   "keywords": [
     "app"
@@ -129,5 +130,5 @@
     "postversion": "git push",
     "V": "npm version minor --force"
   },
-  "version": "0.1.33"
+  "version": "0.1.34"
 }
