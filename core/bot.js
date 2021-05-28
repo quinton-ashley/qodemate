@@ -19,7 +19,7 @@ kb.setKeyboardDelay(0);
 
 let qodemate = {
 	name: 'Qodemate',
-	path: app.getPath('exe')
+	path: electron.app.getPath('exe')
 };
 if (mac) {
 	qodemate.path = qodemate.path.replace(/\/Contents\/MacOS\/(Electron|qodemate)/gi, '');

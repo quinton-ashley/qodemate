@@ -67,36 +67,35 @@
     }
   ],
   "dependencies": {
-    "await-spawn": "^3.0.0",
-    "bootstrap": "^4.4.1",
-    "contro": "^2.1.3",
-    "contro-ui": "^2.0.11",
+    "await-spawn": "*",
+    "bootstrap": "*",
+    "contro-ui": "*",
     "copy-paste": "^1.3.0",
-    "csv-string": "^3.2.0",
+    "csv-string": "*",
     "deep-extend": "^0.6.0",
-    "delay": "^4.3.0",
+    "delay": "*",
     "electron-pug": "^2.0.0",
-    "fs-extra": "^9.0.0",
+    "fs-extra": "*",
     "get-open-apps": "^1.0.8",
     "gitignore-globs": "^0.1.1",
     "gitignore-templates": "0.0.6",
     "ignore": "^5.1.4",
     "jquery": "^3.4.1",
     "klaw": "^3.0.0",
-    "markdown-it": "^10.0.0",
-    "material-design-icons-iconfont": "^5.0.1",
+    "markdown-it": "*",
+    "material-design-icons-iconfont": "*",
     "minimist": "^1.2.5",
     "moment": "^2.24.0",
     "mousetrap": "^1.6.5",
-    "open": "^7.0.3",
+    "node-fetch": "^2.6.1",
+    "open": "*",
     "p5": "^1.0.0",
     "popper.js": "^1.16.1",
-    "pug": "^2.0.4",
+    "pug": "*",
     "robotjs": "^0.6.0",
-    "tether": "^1.4.7"
+    "tether": "*"
   },
   "description": "Qodemate is a dynamic, un-sandboxed CS presentation/textbook platform!",
-  "devDependencies": {},
   "entry point": "app.js",
   "keywords": [
     "app"
@@ -130,5 +129,5 @@
     "postversion": "git push",
     "V": "npm version minor --force"
   },
-  "version": "0.1.31"
+  "version": "0.1.32"
 }
