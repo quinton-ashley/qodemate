@@ -3,9 +3,6 @@
  * authors: quinton-ashley
  * copyright 2018
  */
-if (!log) {
-	const log = console.log;
-}
 const tagRegex = /([^ \w][^\);]+[\);]|[a-zA-Z][^ a-zA-Z]*|[\d\.]+)/g;
 
 let qode, seq, set, setIdx, setIdxs, cur, past, steps, stepItr;
@@ -21,7 +18,7 @@ class Qodemate {
 		// the sequence array stores step parts in the order they occur in
 		// the file(s)
 		seq = [];
-		// the set array stores step parts in sorted order, maintaing sequence
+		// the set array stores step parts in sorted order, maintaining sequence
 		// order of step parts of the same number
 		set = [];
 		// the set index
