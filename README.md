@@ -1,40 +1,6 @@
 # Qodemate
 
-_I stopped working on this project in 2020 because I could never get copy/paste commands to work consistently with some IDEs and typing would trigger autocompletion which was a big problem too. I wanted to pivot to making a website where users could make interactive code presentation "videos" but someone has kind of already done that. Check out <https://ractive-player.org/> really cool stuff!_
-
-_Recently I've considered making Qodemate extensions for code editor apps, VS Code would be the first, and then having the Qodemate app communicate with the Qodemate extension to do the "typing" in the code editor app._
-
-I want Qodemate to be a dynamic CS presentation/textbook platform. In the future maybe it could even be a coding assistant you could talk to, hence the name.
-
-## Goals
-
-- with minimal prep work CS educators should be able to give fancy, multi-file, non-sequential, step sequenced reproduction presentations (like CodeAcademy)
-- should make the process of coding transparent so CS educators can teach computer science, not just programming
-- should work with fully featured development apps (like Eclipse, Adobe Brackets, Xcode, etc.) without using a sandboxed webpage (CodeAcademy, Hour of Code, Code Studio). Some sandboxed tutorial sites oversimplify things. They often have a lot of code running behind the scenes that users can't access. This results in students not knowing how to start their own projects outside of the site's sandboxed environment.
-- should be able to pull up docs, install packages, run commands, and even do a search on StackOverflow
-
-## Why should I use Qodemate?
-
-### Static Slide Presentations
-
-- require a lot of prep work
-- slides can only contain static screenshots or excerpts of code
-- can't run the program at different points during the presentation
-
-### Live Coding Presentations
-
-- must be done from memory or improvised
-- teaching a class and typing at the same time can be difficult
-
-### Dynamic Qodemate Presentations
-
-- fully choreograph a dynamic presentation (improv is optional)
-- hit the spacebar or use a clicker like you would with a powerpoint
-- run code at any point during the presentation
-
-### Summary
-
-Don't just teach your students programming, teach them the process of programming! By using Qodemate you get all the benefits of static slide based presentations and live coding presentations and none of the disadvantages! Still not convinced? Take a look at the simple_sample.js and lesson.md files bellow and see how easy it is to section out your code and write slides in markdown!
+I want Qodemate to be a platform CS educators use to make interactive lessons very easily. Qodemate should be able to write code step by step, pull up documentation, install packages, run commands, and even do searches on StackOverflow!
 
 ## Simple Sample Project
 
@@ -63,6 +29,67 @@ Initialize our x and y variables.
 
 Let's make sure to log what we're doing in the console.
 ```
+
+## Result
+
+```md
+# setup function //0
+
+Let's write the setup function!
+```
+
+```js
+// simple_sample.js
+function setup() {}
+```
+
+```md
+# setup function //1
+
+Initialize our x and y variables.
+```
+
+```js
+// simple_sample.js
+function setup() {
+  let x = 30;
+  let y = 50;
+}
+```
+
+```md
+# setup function //2
+
+Let's make sure to log what we're doing in the console.
+```
+
+```js
+// simple_sample.js
+function setup() {
+  console.log("setting up...");
+  let x = 30;
+  let y = 50;
+}
+```
+
+## Why use Qodemate for presentations?
+
+### Static Slide Presentations
+
+- require a lot of prep work
+- slides can only contain static screenshots or excerpts of code
+- can't run the program at different points during the presentation
+
+### Live Coding Presentations
+
+- must be done from memory or improvised
+- teaching a class and typing at the same time can be difficult
+
+### Dynamic Qodemate Presentations
+
+- fully choreograph a dynamic presentation (improv is optional)
+- hit the spacebar or use a clicker like a powerpoint
+- run code at any point during the presentation
 
 ## Installation Instructions for Developers
 

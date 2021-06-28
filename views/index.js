@@ -3,7 +3,7 @@
  *
  * handles responses to user interactions with the menu and app UI
  */
-module.exports = async function (arg) {
+module.exports = async function(arg) {
 	// arg.v = false; // quieter log
 	await require(arg.__root + '/core/setup.js')(arg);
 	log('version: ' + pkg.version);
@@ -88,7 +88,7 @@ module.exports = async function (arg) {
 		}
 		log('using qoapp:');
 		log(bot.qoapp);
-		// single file open, I'm currently not allowing this
+		// single file open, I'm currently not enabling this
 		//		else {
 		//			files = project;
 		//			let pDir = path.dirname(project.path);
@@ -172,7 +172,7 @@ module.exports = async function (arg) {
 		await bot.focusOnQodemate();
 	}
 
-	cui.onAction = async function (act) {
+	cui.onAction = async function(act) {
 		if (act == 'reset') {
 			log('reset');
 			qm.restart();
@@ -184,7 +184,7 @@ module.exports = async function (arg) {
 		}
 	}
 
-	cui.onChange = async function (state, subState, gamepadConnected) {
+	cui.onChange = async function(state, subState, gamepadConnected) {
 		if (state == 'loaded') {
 			$('#open').hide();
 			$('#play').show();
