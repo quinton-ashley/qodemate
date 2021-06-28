@@ -123,16 +123,16 @@ function setup() {
 function draw() {
   ball.x--;
   ellipse(ball.x, ball.y, ball.d, ball.d);
-} //2
+}
 ```
 
 ## Goals
 
-I also want Qodemate to be able to pull up documentation, install packages, run commands, and even do searches on StackOverflow! I also want steps to be able to be synced to video tutorials on Youtube, vimeo, etc outside a classroom setting to create interactive tutorial experiences outside the classroom.
+I also want Qodemate to be able to pull up documentation, install packages, run commands, and even do searches on StackOverflow! I also Qodemate presentations to be "playable" when synced to video lessons/presentations/tutorials.
 
 I stopped working on this project in 2020 because I could never get copy/paste commands to work consistently with some IDEs and typing would trigger autocompletion which was a big problem too. I wanted to pivot to making a website where users could make interactive code presentation "videos" but someone has kind of already done that. Check out <https://ractive-player.org/> really cool stuff but not nearly as easy to use as I hope Qodemate would be.
 
-Recently I've considered making Qodemate extensions for code editor apps, VS Code would be the first, and then having the Qodemate app communicate with the Qodemate extension to do the "typing" in the code editor app in a more controlled way. I could also do error checking by checking the files contents to make sure it's right. I've thought about changing the contents directly but some IDEs don't like that or wouldn't update quick enough.
+Recently I've considered making a Qodemate extension for VS Code and having the Qodemate app communicate with the Qodemate extension to do the "typing" in a more controlled way. I could also do error checking by checking the file contents to make sure it's right. I've also thought about changing the contents directly but it seems like that approach would be too slow.
 
 ## Why use Qodemate for presentations?
 

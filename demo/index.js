@@ -1,5 +1,9 @@
-let gm = new Qodemate();
-qm.parseFile('simple_sample.js', `
+let qm = new Qodemate();
+qm.parseFile({
+	base: 'simple_sample.js',
+	name: 'simple_sample',
+	ext: '.js'
+}, `
 // simple_sample.js //0
 let ball = {
   x: 50,
@@ -20,7 +24,11 @@ function draw() {
 } //2
 `, 0);
 
-qm.parseFile('lesson.md', `
+qm.parseFile({
+	base: 'lesson.md',
+	name: 'lesson',
+	ext: '.md'
+}, `
 # setup function //0
 
 Start with the p5.js setup function, create a canvas 100w x 100h.
@@ -41,6 +49,8 @@ To make the ball move to the right we can increment its x value.
 
 To make the ball move to the right we can decrement its x value.
 `, 1);
+
+qm.init();
 
 async function performPart() {
 	let part = qm.nextPart();
@@ -71,4 +81,4 @@ async function play() {
 	await delay(2000);
 }
 
-play();
+// play();
