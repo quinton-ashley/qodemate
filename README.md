@@ -1,5 +1,7 @@
 # Qodemate
 
+#### I stopped working on this project in 2020 because I could never get copy/paste commands to work consistently with some IDEs and typing would trigger autocompletion which was a big problem too. I wanted to pivot to making a website where users could make interactive code presentation "videos" but someone has kind of already done that. Check out <https://ractive-player.org/> it's pretty cool but not as easy to use as I hoped Qodemate would be.
+
 I want Qodemate to be a platform CS educators use to make interactive lessons. I made an algorithm that parses step number comments in the user's code so Qodemate can reproduce the program step by step.
 
 ## Simple Sample Project
@@ -129,8 +131,6 @@ function draw() {
 ## Goals
 
 I also want Qodemate to be able to pull up documentation, install packages, run commands, and even do searches on StackOverflow! I also Qodemate presentations to be "playable" when synced to video lessons/presentations/tutorials.
-
-I stopped working on this project in 2020 because I could never get copy/paste commands to work consistently with some IDEs and typing would trigger autocompletion which was a big problem too. I wanted to pivot to making a website where users could make interactive code presentation "videos" but someone has kind of already done that. Check out <https://ractive-player.org/> really cool stuff but not nearly as easy to use as I hope Qodemate would be.
 
 Recently I've considered making a Qodemate extension for VS Code and having the Qodemate app communicate with the Qodemate extension to do the "typing" in a more controlled way. I could also do error checking by checking the file contents to make sure it's right. I've also thought about changing the contents directly but it seems like that approach would be too slow.
 
